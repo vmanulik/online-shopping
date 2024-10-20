@@ -1,5 +1,7 @@
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence;
+using OnlineShopping.Shared.Infrastructure;
+using OnlineShopping.CartService.Infrastructure.Repositories;
 
 namespace OnlineShopping.CartService
 {
@@ -37,6 +39,11 @@ namespace OnlineShopping.CartService
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<ICartServiceDbContext, CartServiceDbContext>();
+            builder.Services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
+            
+            builder.Services.Configure<LiteDbOptions>(
+                builder.Configuration.GetSection("LiteDbOptions")
+            );
         }
     }
 }

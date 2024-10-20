@@ -1,4 +1,4 @@
-﻿using LiteDB;
+﻿using LiteDB.Async;
 using Microsoft.Extensions.Options;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
@@ -7,14 +7,14 @@ namespace OnlineShopping.CartService.Infrastructure.Persistence;
 
 public class CartServiceDbContext : ICartServiceDbContext
 {
-    public ILiteDatabase Database { get; }
+    public ILiteDatabaseAsync Database { get; }
 
     public CartServiceDbContext(IOptions<LiteDbOptions> options)
     {
-        Database = new LiteDatabase(options.Value.DatabaseLocation);
+        Database = new LiteDatabaseAsync(options.Value.DatabaseLocation);
     }
 
-    public ILiteCollection<Cart> Carts => Database.GetCollection<Cart>("Cart");
+    public ILiteCollectionAsync<Cart> Carts => Database.GetCollection<Cart>("Cart");
 
-    public ILiteCollection<Item> Items => Database.GetCollection<Item>("Item");
+    public ILiteCollectionAsync<Item> Items => Database.GetCollection<Item>("Item");
 }

@@ -1,9 +1,10 @@
-﻿using OnlineShopping.Shared.Domain.Entities;
+﻿using OnlineShopping.CartService.Infrastructure.Persistence.Common;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
-public class Item : BaseEntity
+public class Item : BaseLiteDbEntity
 {
+    public int ExternalId { get; init; }
     public string Name { get; init; }
     public string? ImageUrl { get; init; }
     public string? ImageDescription { get; init; }
@@ -12,9 +13,9 @@ public class Item : BaseEntity
 
     public Item() { }
 
-    public Item(int id, string name, decimal price) 
-        : base(id)
+    public Item(int externalId, string name, decimal price)
     {
+        ExternalId = externalId;
         Name = name;
         Price = price;
         Quantity = 1;

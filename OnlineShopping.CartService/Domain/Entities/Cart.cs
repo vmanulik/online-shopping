@@ -1,18 +1,18 @@
-﻿using OnlineShopping.Shared.Domain.Exceptions;
+﻿using LiteDB;
+using OnlineShopping.CartService.Infrastructure.Persistence.Common;
+using OnlineShopping.Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
-public class Cart
+public class Cart : BaseLiteDbEntity
 {
     private readonly Dictionary<int, Item> _items = new();
 
-    public Guid Id { get; private set; }
-
     private Cart() { }
 
-    public Cart(Guid guid)
+    public Cart(int id)
     {
-        Id = guid;
+        Id = id;
     }
 
     public void AddItem(int id, string name, decimal price)
