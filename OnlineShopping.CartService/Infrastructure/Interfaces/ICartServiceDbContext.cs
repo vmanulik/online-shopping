@@ -1,8 +1,7 @@
-﻿using LiteDB;
-using LiteDB.Async;
+﻿using LiteDB.Async;
 using OnlineShopping.CartService.Domain.Entities;
 
-namespace OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
+namespace OnlineShopping.CartService.Infrastructure.Interfaces;
 
 public interface ICartServiceDbContext
 {

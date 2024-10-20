@@ -1,19 +1,26 @@
 ﻿using LiteDB;
 using LiteDB.Queryable;
-using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
-using OnlineShopping.Shared.Domain.Entities;
+using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.Shared.Infrastructure;
 
 namespace OnlineShopping.CartService.Infrastructure.Repositories;
 
-public class Repository<T> : ISharedRepository<T> where T : BaseEntity
+public class Repository<T> : ILiteDbRepository<T> where T : new()
 {
-    private ICartServiceDbContext _dbContext;
+    protected ICartServiceDbContext _dbContext;
 
     public Repository(ICartServiceDbContext cartServiceDbContext)
     {
         _dbContext = cartServiceDbContext;
     }
+
+    public async Task<List<T>> GetAllAsync()
+    {
+        return _dbContext.Database
+            .GetCollection<T>(nameof(T))
+            .AsQueryable()
+            .ToList();
+    }  
 
     public IQueryable<T> GetAllAsQueryable()
     {
@@ -22,48 +29,45 @@ public class Repository<T> : ISharedRepository<T> where T : BaseEntity
             .AsQueryable();
     }
 
-    public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Database
-            .GetCollection<T>(nameof(T))
-            .AsQueryable()
-            .ToList();
-    }
-
-    public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public Task<T> GetByIdAsync(int id)
     {
         return _dbContext.Database
             .GetCollection<T>(nameof(T))
             .FindByIdAsync(id);
     }
 
-    public Task AddAsync(T entity, CancellationToken cancellationToken = default)
+    public Task<T> GetByGuidAsync(Guid id)
+    {
+        return _dbContext.Database
+            .GetCollection<T>(nameof(T))
+            .FindByIdAsync(id);
+    }
+
+    public Task AddAsync(T entity)
     {
         return _dbContext.Database
             .GetCollection<T>(nameof(T))
             .InsertAsync(entity);
     }
 
-    public Task AddRangeAsync(IEnumerable<T> entities)
-    {
-        return _dbContext.Database
-            .GetCollection<T>(nameof(T))
-            .InsertBulkAsync(entities);
-    }
-
-    public Task RemoveAsync(T entity, CancellationToken cancellationToken)
+    public Task UpdateAsync(T entity)
     {
         return _dbContext.Database
                 .GetCollection<T>(nameof(T))
-                .DeleteAsync(entity.Id);
+                .UpdateAsync(entity);
     }
 
-    public Task RemoveRangeAsync(IEnumerable<T> entities)
+    public Task RemoveByIdAsync(int id)
     {
-        var ids = entities.Select(e => e.Id);
-
         return _dbContext.Database
                 .GetCollection<T>(nameof(T))
-                .DeleteManyAsync(e => ids.Contains(e.Id));
+                .DeleteAsync(id);
+    } 
+    
+    public Task RemoveByGuidAsync(Guid id)
+    {
+        return _dbContext.Database
+                .GetCollection<T>(nameof(T))
+                .DeleteAsync(id);
     }
 }

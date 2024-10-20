@@ -1,37 +1,38 @@
 ﻿using LiteDB;
-using OnlineShopping.Shared.Domain.Entities;
 using OnlineShopping.Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
-public class Cart : BaseEntity
+public class Cart
 {
-    private readonly Dictionary<int, Item> _items = new();
+    public Guid Id { get; set; }
 
-    private Cart() { }
+    public List<Item> Items { get; set; } = new();
 
-    public Cart(int id)
+    public Cart() { }
+
+    public Cart(Guid id)
     {
         Id = id;
     }
 
-    public void AddItem(int id, string name, decimal price)
+    public void AddItem(Item item)
     {
-        var item = _items[id];
+        var storedItem = Items.SingleOrDefault(i => i.Id == item.Id);
 
-        if (item == null)
+        if (storedItem == null)
         {
-            _items[id] = new Item(id, name, price);
+            Items.Add(item);
         }
         else
         {
-            item.IncrementQuantity();
+            storedItem.SetQuantity(storedItem.Quantity + item.Quantity);
         }
     }
 
     public void RemoveItem(int id)
     {
-        var item = _items[id];
+        var item = Items.SingleOrDefault(i => i.Id == id);
 
         if (item == null)
         {
@@ -39,13 +40,13 @@ public class Cart : BaseEntity
         }
         else
         {
-            _items.Remove(id);
+            Items.Remove(item);
         }
     }
 
     public void SetItemQuantity(int id, int quantity)
     {
-        var item = _items[id];
+        var item = Items.SingleOrDefault(i => i.Id == id);
 
         if (item == null)
         {
@@ -59,6 +60,6 @@ public class Cart : BaseEntity
 
     public List<Item> GetItems()
     {
-        return _items.Values.ToList();
+        return Items;
     }
 }

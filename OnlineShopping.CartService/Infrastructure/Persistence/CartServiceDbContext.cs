@@ -1,6 +1,7 @@
 ﻿using LiteDB.Async;
 using Microsoft.Extensions.Options;
 using OnlineShopping.CartService.Domain.Entities;
+using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 
 namespace OnlineShopping.CartService.Infrastructure.Persistence;
