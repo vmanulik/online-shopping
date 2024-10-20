@@ -9,6 +9,8 @@
     <Title>Online Shopping Shared lib</Title>
     <Description>A shared lib package for OnlineShopping project</Description>
     <Authors>Viacheslav Manulik</Authors>
+	
+	<Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
