@@ -1,8 +1,8 @@
-﻿using OnlineShopping.CartService.Infrastructure.Persistence.Common;
+﻿using OnlineShopping.Shared.Domain.Entities;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
-public class Item : BaseLiteDbEntity
+public class Item : BaseEntity
 {
     public int ExternalId { get; init; }
     public string Name { get; init; }

@@ -1,12 +1,12 @@
 ﻿using LiteDB;
 using LiteDB.Queryable;
-using OnlineShopping.CartService.Infrastructure.Persistence.Common;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
+using OnlineShopping.Shared.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 
 namespace OnlineShopping.CartService.Infrastructure.Repositories;
 
-public class Repository<T> : ISharedRepository<T> where T : BaseLiteDbEntity
+public class Repository<T> : ISharedRepository<T> where T : BaseEntity
 {
     private ICartServiceDbContext _dbContext;
 

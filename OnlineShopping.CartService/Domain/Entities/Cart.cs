@@ -1,10 +1,10 @@
 ﻿using LiteDB;
-using OnlineShopping.CartService.Infrastructure.Persistence.Common;
+using OnlineShopping.Shared.Domain.Entities;
 using OnlineShopping.Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
-public class Cart : BaseLiteDbEntity
+public class Cart : BaseEntity
 {
     private readonly Dictionary<int, Item> _items = new();
 
