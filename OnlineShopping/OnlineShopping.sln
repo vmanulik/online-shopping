@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopping.CartService", "OnlineShopping.CartService\OnlineShopping.CartService.csproj", "{9632D3BB-58F9-4308-AED5-6E52D9B9AE9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopping.Shared", "OnlineShopping.Shared\OnlineShopping.Shared.csproj", "{939CC3C2-EF0F-4E7E-8752-92F0A5BB7D94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9632D3BB-58F9-4308-AED5-6E52D9B9AE9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9632D3BB-58F9-4308-AED5-6E52D9B9AE9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9632D3BB-58F9-4308-AED5-6E52D9B9AE9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{939CC3C2-EF0F-4E7E-8752-92F0A5BB7D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{939CC3C2-EF0F-4E7E-8752-92F0A5BB7D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{939CC3C2-EF0F-4E7E-8752-92F0A5BB7D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{939CC3C2-EF0F-4E7E-8752-92F0A5BB7D94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
