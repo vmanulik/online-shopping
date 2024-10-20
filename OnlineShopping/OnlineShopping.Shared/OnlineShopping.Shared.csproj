@@ -4,10 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageOutputPath>..\Packages</PackageOutputPath>
+    <Title>Online Shopping Shared lib</Title>
+    <Description>A shared lib package for OnlineShopping project</Description>
+    <Authors>Viacheslav Manulik</Authors>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Application\" />
-  </ItemGroup>
 
 </Project>

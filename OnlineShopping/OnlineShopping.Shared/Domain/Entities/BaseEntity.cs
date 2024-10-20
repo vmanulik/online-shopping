@@ -2,5 +2,12 @@
 
 public abstract class BaseEntity
 {
-    public int Id { get; private set; }
+    public int Id { get; init; }
+
+    protected BaseEntity() { }
+
+    protected BaseEntity(int id)
+    {
+        Id = id;
+    }
 }
