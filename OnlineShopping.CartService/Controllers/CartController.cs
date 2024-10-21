@@ -1,14 +1,15 @@
-﻿using LiteDB;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopping.CartService.API.Commands;
+using OnlineShopping.CartService.API.Queries;
 using OnlineShopping.CartService.Domain.Entities;
-using OnlineShopping.Shared.Domain.Exceptions;
+using OnlineShopping.CatalogService.API;
 using OnlineShopping.Shared.Infrastructure;
 
 namespace OnlineShopping.CartService.API
 {
     [ApiController]
     [Route("[controller]")]
-    public class CartController : ControllerBase
+    public class CartController : CartControllerBase
     {
         private readonly ILogger<CartController> _logger;
         private readonly ILiteDbRepository<Cart> _cartRepository;
@@ -25,67 +26,27 @@ namespace OnlineShopping.CartService.API
         }
 
         [HttpGet("{id}/items")]
-        public async Task<List<Item>> GetCartItems([FromRoute] Guid id)
+        public async Task<ActionResult<List<Item>>> GetCartItems([FromRoute] Guid id)
         {
-            var cart = await _cartRepository.GetByGuidAsync(id);
-            if (cart == null)
-            {
-                throw new ItemNotFoundException($"Cart ID {id} was not found in the {nameof(Cart)}");
-            }
+            var items = await Mediator.Send(new GetCartItemsQuery(id));
 
-            var items = _itemRepository
-                .GetAllAsQueryable()
-                .Where(x => x.CartId == id)
-                .ToList();
-
-            return items;
+            return Ok(items);
         }
 
         [HttpPut("{id}/items/add")]
-        public async Task AddItemToCart([FromRoute] Guid id, [FromBody] Item item)
+        public async Task<IActionResult> AddItemToCart([FromRoute] Guid id, [FromBody] AddItemToCartCommand command)
         {
-            Cart cart = await _cartRepository.GetByGuidAsync(id);
-            if(cart == null)
-            {
-                cart = new Cart(id);
-                await _cartRepository.AddAsync(cart);
+            await Mediator.Send(command);
 
-                item.SetCart(cart.Id);
-                await _itemRepository.AddAsync(item);
-            }
-            else
-            {
-                var items = _itemRepository
-                    .GetAllAsQueryable()
-                    .Where(x => x.CartId == id);
-                cart.Items = items.ToList();
-
-                cart.AddItem(item);
-
-                item = cart.Items.Single(x => x.Id == item.Id);
-                await _itemRepository.UpdateAsync(item);
-            }
+            return Ok();
         }
 
-        [HttpPut("{id}/items/remove")]
-        public async Task RemoveItemFromCart([FromRoute] Guid id, int itemId)
+        [HttpPut("{id}/items/{itemId}/remove")]
+        public async Task<IActionResult> RemoveItemFromCart([FromRoute] Guid id, [FromRoute] int itemId)
         {
-            Cart cart = await _cartRepository.GetByGuidAsync(id);
-            if (cart == null)
-            {
-                throw new ItemNotFoundException($"Cart ID {id} was not found in the {nameof(Cart)}");
-            }
-            
-            var item = _itemRepository
-                .GetAllAsQueryable()
-                .Where(x => x.CartId == id);
-            if (item == null)
-            {
-                throw new ItemNotFoundException($"Item ID {itemId} was not found in the {nameof(item)}");
-            }
+            await Mediator.Send(new RemoveItemFromCartCommand(id, itemId));
 
-
-            await _itemRepository.RemoveByIdAsync(itemId);
+            return Ok();
         }
     }
 }

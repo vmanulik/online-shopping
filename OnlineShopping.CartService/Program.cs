@@ -3,6 +3,7 @@ using OnlineShopping.CartService.Infrastructure.Persistence;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Repositories;
 using OnlineShopping.Shared.Infrastructure;
+using System.Reflection;
 
 namespace OnlineShopping.CartService
 {
@@ -45,6 +46,11 @@ namespace OnlineShopping.CartService
             builder.Services.Configure<LiteDbOptions>(
                 builder.Configuration.GetSection("LiteDbOptions")
             );
+
+            builder.Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
         }
     }
 }
