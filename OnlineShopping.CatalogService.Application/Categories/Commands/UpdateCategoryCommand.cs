@@ -3,21 +3,25 @@ using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 using Shared.Application.Exceptions;
 
-namespace OnlineShopping.CartService.API.Queries;
+namespace OnlineShopping.CatalogService.Application.Categories.Commands;
 
-public record GetCategoryQuery(int Id) : IRequest<Category>;
+public record UpdateCategoryCommand(
+    int Id,
+    string Name,
+    int? ParentCategoryId,
+    string? ImageUrl) : IRequest;
 
-public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, Category>
+public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand>
 {
     private readonly ISharedRepository<Category> _categoryRepository;
 
-    public GetCategoryQueryHandler(
+    public UpdateCategoryCommandHandler(
             ISharedRepository<Category> categoryRepository)
     {
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Category> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = await _categoryRepository.GetByIdAsync(request.Id, cancellationToken);
         if (category == null)
@@ -25,6 +29,8 @@ public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, Categor
             throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Category)}");
         }
 
-        return category;
+        category.Update(request.Name, request.ImageUrl, request.ParentCategoryId);
+
+        await _categoryRepository.SaveAsync();
     }
 }

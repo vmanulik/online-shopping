@@ -2,7 +2,7 @@
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 
-namespace OnlineShopping.CartService.API.Commands;
+namespace OnlineShopping.CatalogService.Application.Categories.Commands;
 
 public record CreateCategoryCommand(
     string Name,

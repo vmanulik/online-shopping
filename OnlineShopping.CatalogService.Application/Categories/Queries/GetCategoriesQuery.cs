@@ -2,7 +2,7 @@
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 
-namespace OnlineShopping.CartService.API.Queries;
+namespace OnlineShopping.CatalogService.Application.Categories.Queries;
 
 public record GetCategoriesQuery() : IRequest<List<Category>>;
 

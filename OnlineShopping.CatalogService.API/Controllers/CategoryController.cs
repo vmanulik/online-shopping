@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopping.CartService.API.Commands;
-using OnlineShopping.CartService.API.Queries;
 using OnlineShopping.CartService.Domain.Entities;
+using OnlineShopping.CatalogService.Application.Categories.Commands;
+using OnlineShopping.CatalogService.Application.Categories.Queries;
 
 namespace OnlineShopping.CatalogService.API
 {
@@ -32,11 +32,11 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpPost()]
-        public async Task<ActionResult<Category>> CreateCategory([FromBody] CreateCategoryCommand command)
+        public async Task<ActionResult<int>> CreateCategory([FromBody] CreateCategoryCommand command)
         {
-            await Mediator.Send(command);
+            int id = await Mediator.Send(command);
 
-            return Ok();
+            return Ok(id);
         }
 
         [HttpPut("{id}")]

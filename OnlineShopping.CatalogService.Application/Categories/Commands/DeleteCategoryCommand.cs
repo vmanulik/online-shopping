@@ -3,7 +3,7 @@ using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 using Shared.Application.Exceptions;
 
-namespace OnlineShopping.CartService.API.Commands;
+namespace OnlineShopping.CatalogService.Application.Categories.Commands;
 
 public record DeleteCategoryCommand(
     int Id) : IRequest;
