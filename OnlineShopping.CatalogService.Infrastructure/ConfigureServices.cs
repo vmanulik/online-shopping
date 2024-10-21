@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 
-namespace OnlineShopping.CatalogService;
+namespace OnlineShopping.CatalogService.Infrastructure;
 
 public static class ConfigureServices
 {

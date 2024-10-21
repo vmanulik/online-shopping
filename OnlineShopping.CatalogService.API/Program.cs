@@ -1,5 +1,5 @@
-using OnlineShopping.CatalogService.Infrastructure.Repositories;
-using OnlineShopping.Shared.Infrastructure;
+using OnlineShopping.CatalogService.Application;
+using OnlineShopping.CatalogService.Infrastructure;
 
 namespace OnlineShopping.CatalogService.API
 {
@@ -17,8 +17,7 @@ namespace OnlineShopping.CatalogService.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddCatalogInfrastructureServices(builder.Configuration);
-
-            builder.Services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
+            builder.Services.AddCatalogServiceApplicationServices(builder.Configuration);
 
             var app = builder.Build();
 
