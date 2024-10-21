@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 
@@ -10,9 +11,11 @@ using OnlineShopping.CatalogService.Infrastracture.Persistence;
 namespace OnlineShopping.CatalogService.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogServiceDbContext))]
-    partial class CatalogServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021113431_OnlineShopping_CatalogService_Update_Category_Product_Relations")]
+    partial class OnlineShopping_CatalogService_Update_Category_Product_Relations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
