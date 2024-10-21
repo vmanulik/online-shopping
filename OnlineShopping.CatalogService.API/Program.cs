@@ -1,3 +1,6 @@
+using OnlineShopping.CatalogService.Infrastructure.Repositories;
+using OnlineShopping.Shared.Infrastructure;
+
 namespace OnlineShopping.CatalogService.API
 {
     public class Program
@@ -13,7 +16,13 @@ namespace OnlineShopping.CatalogService.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCatalogInfrastructureServices(builder.Configuration);
+
+            builder.Services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
+
             var app = builder.Build();
+
+            app.UseMigrationsEndPoint();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
