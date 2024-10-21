@@ -17,6 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CatalogServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CatalogService.Infrastructure", "OnlineShopping.CatalogService.Infrastructure\OnlineShopping.CatalogService.Infrastructure.csproj", "{BECC5003-A7E4-46D5-986B-26C7F7D3A84F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnlineShopping.CartService", "OnlineShopping.CartService", "{F430535C-2CFA-45FC-90A1-D3C59573992A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopping.CartService.Tests", "OnlineShopping.CartService.Tests\OnlineShopping.CartService.Tests.csproj", "{E664E8C9-FDD0-481B-931A-B7898E35258B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopping.CatalogService.Tests", "OnlineShopping.CatalogService.Tests\OnlineShopping.CatalogService.Tests.csproj", "{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,15 +52,26 @@ Global
 		{BECC5003-A7E4-46D5-986B-26C7F7D3A84F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BECC5003-A7E4-46D5-986B-26C7F7D3A84F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BECC5003-A7E4-46D5-986B-26C7F7D3A84F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E664E8C9-FDD0-481B-931A-B7898E35258B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E664E8C9-FDD0-481B-931A-B7898E35258B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E664E8C9-FDD0-481B-931A-B7898E35258B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E664E8C9-FDD0-481B-931A-B7898E35258B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{9632D3BB-58F9-4308-AED5-6E52D9B9AE9D} = {F430535C-2CFA-45FC-90A1-D3C59573992A}
 		{AAC2863E-CA96-4A08-8FA7-82F205426264} = {5CAE9045-7EA8-401D-A1A7-EFDACB477FFF}
 		{06E58984-202B-4EB1-938A-1EEC1AEDCC61} = {5CAE9045-7EA8-401D-A1A7-EFDACB477FFF}
 		{54EB603E-8482-426E-A108-BC5AE1004DB3} = {5CAE9045-7EA8-401D-A1A7-EFDACB477FFF}
 		{BECC5003-A7E4-46D5-986B-26C7F7D3A84F} = {5CAE9045-7EA8-401D-A1A7-EFDACB477FFF}
+		{E664E8C9-FDD0-481B-931A-B7898E35258B} = {F430535C-2CFA-45FC-90A1-D3C59573992A}
+		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710} = {5CAE9045-7EA8-401D-A1A7-EFDACB477FFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EDA812C4-68ED-4B48-9300-F38157DC6BF1}

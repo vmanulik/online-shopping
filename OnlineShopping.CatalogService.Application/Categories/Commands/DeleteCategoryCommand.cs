@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
-using Shared.Application.Exceptions;
+using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CatalogService.Application.Categories.Commands;
 

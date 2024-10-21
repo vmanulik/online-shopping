@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
-using OnlineShopping.Shared.Domain.Exceptions;
 using OnlineShopping.Shared.Infrastructure;
-using Shared.Application.Exceptions;
+using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.API.Commands;
 
@@ -36,7 +35,7 @@ public class RemoveItemFromCartCommandHandler : IRequestHandler<RemoveItemFromCa
             .Where(x => x.CartId == request.Id);
         if (item == null)
         {
-            throw new ItemNotFoundException($"Item ID {request.ItemId} was not found in the {nameof(item)}");
+            throw new NotFoundException($"Item ID {request.ItemId} was not found in the {nameof(item)}");
         }
 
 

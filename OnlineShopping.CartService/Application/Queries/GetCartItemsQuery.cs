@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
-using OnlineShopping.Shared.Domain.Exceptions;
 using OnlineShopping.Shared.Infrastructure;
+using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.API.Queries;
 
@@ -26,7 +26,7 @@ public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQuery, List<
         var cart = await _cartRepository.GetByGuidAsync(request.Id);
         if (cart == null)
         {
-            throw new ItemNotFoundException($"Cart ID {request.Id} was not found in the {nameof(Cart)}");
+            throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Cart)}");
         }
 
         var items = _itemRepository

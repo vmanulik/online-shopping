@@ -1,5 +1,5 @@
 ﻿using LiteDB;
-using OnlineShopping.Shared.Domain.Exceptions;
+using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
@@ -36,7 +36,7 @@ public class Cart
 
         if (item == null)
         {
-            throw new ItemNotFoundException($"Item ID {id} was not found in the {nameof(Cart)}");
+            throw new NotFoundException($"Item ID {id} was not found in the {nameof(Cart)}");
         }
         else
         {
@@ -50,7 +50,7 @@ public class Cart
 
         if (item == null)
         {
-            throw new ItemNotFoundException($"Item ID {id} was not found in the {nameof(Cart)}");
+            throw new NotFoundException($"Item ID {id} was not found in the {nameof(Cart)}");
         }
         else
         {

@@ -2,7 +2,7 @@
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.Shared.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
-using Shared.Application.Exceptions;
+using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CatalogService.Infrastructure.Repositories;
 
