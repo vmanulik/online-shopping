@@ -39,13 +39,27 @@ namespace OnlineShopping.CatalogService.Tests
             var response3 = await client.GetFromJsonAsync<List<Category>>("/category");
             Assert.IsNotNull(response3);
             Assert.That(response3.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task Remove_ShouldBeDeletedAndNotRetrieved()
+        {
+            using var client = _factory.CreateClient();
+
+            var request = new CreateCategoryCommand("Category 1", null, null);
+            var response1 = await client.PostAsJsonAsync("/category", request);
+            response1.EnsureSuccessStatusCode(); 
+            
+            var response3 = await client.GetFromJsonAsync<List<Category>>("/category");
+            Assert.IsNotNull(response3);
+            Assert.That(response3.Count, Is.EqualTo(1));
 
             var response4 = await client.DeleteAsync("/category/1");
             response4.EnsureSuccessStatusCode();
 
             var response5 = await client.GetFromJsonAsync<List<Category>>("/category");
             Assert.IsNotNull(response5);
-            Assert.That(response5.Count, Is.EqualTo(0));
+            Assert.That(response5.Count, Is.EqualTo(response3.Count - 1));
         }
     }
 }
