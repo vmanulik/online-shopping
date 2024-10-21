@@ -18,6 +18,8 @@ public static class ConfigureServices
                 }
             ));
 
+        services.AddScoped<CatalogServiceDbContextInitializer>();
+
         return services;
     }
 }

@@ -1,11 +1,12 @@
 using OnlineShopping.CatalogService.Application;
+using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
 
 namespace OnlineShopping.CatalogService.API
 {
-    public class Program
+    public partial class Program
     {
-        public static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,14 @@ namespace OnlineShopping.CatalogService.API
             var app = builder.Build();
 
             app.UseMigrationsEndPoint();
+
+            // Initialise and seed database
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbInitializator = scope.ServiceProvider.GetRequiredService<CatalogServiceDbContextInitializer>();
+
+                await dbInitializator.InitialiseAsync();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
