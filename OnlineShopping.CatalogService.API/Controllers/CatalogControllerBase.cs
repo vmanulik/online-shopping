@@ -12,4 +12,8 @@ public class CatalogControllerBase : ControllerBase
     private ISender? _mediator;
 
     protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
+
+    [NonAction]
+    protected new CreatedAtActionResult CreatedAtAction(string? actionName, object? routeValues)
+        => CreatedAtAction(actionName, controllerName: null, routeValues: routeValues, value: null);
 }

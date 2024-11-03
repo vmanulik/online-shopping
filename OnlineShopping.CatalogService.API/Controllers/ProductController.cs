@@ -15,7 +15,7 @@ namespace OnlineShopping.CatalogService.API
             _logger = logger;
         }
 
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
@@ -33,13 +33,13 @@ namespace OnlineShopping.CatalogService.API
             return Ok(Product);
         }
 
-        [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<int>> CreateProduct([FromBody] CreateProductCommand command)
         {
             int id = await Mediator.Send(command);
 
-            return Ok(id);
+            return CreatedAtAction(nameof(GetProduct), new { id });
         }
 
         [HttpPut("{id}")]
