@@ -1,4 +1,4 @@
-﻿namespace OnlineShopping.Shared.Domain.Entities;
+﻿namespace OnlineShopping.Shared.Application.Models;
 
 public class PaginatedList<T>
 {
@@ -10,7 +10,7 @@ public class PaginatedList<T>
     public PaginatedList(IReadOnlyCollection<T> items, int pageNumber, int pageSize)
     {
         PageNumber = pageNumber;
-        TotalPages = (int) Math.Ceiling(items.Count / (double) pageSize);
+        TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize);
         TotalCount = items.Count;
         Items = items;
     }
