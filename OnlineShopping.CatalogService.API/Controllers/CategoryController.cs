@@ -49,7 +49,7 @@ namespace OnlineShopping.CatalogService.API
         {
             if (id != command.Id)
             {
-                return BadRequest($"Route id {id} does not match request body id {command.Id}");
+                return ValidationProblem($"Route id {id} does not match request body id {command.Id}");
             }
 
             await Mediator.Send(command);

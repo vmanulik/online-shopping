@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OnlineShopping.CatalogService.Application\OnlineShopping.CatalogService.Application.csproj" />
     <ProjectReference Include="..\OnlineShopping.CatalogService.Infrastructure\OnlineShopping.CatalogService.Infrastructure.csproj" />
+    <ProjectReference Include="..\OnlineShopping.Shared\OnlineShopping.Shared.csproj" />
   </ItemGroup>
 
 </Project>

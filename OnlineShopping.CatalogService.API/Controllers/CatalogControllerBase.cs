@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using OnlineShopping.Shared.Application.Filters;
 
 namespace OnlineShopping.CatalogService.API;
 
 [ApiController]
+[ApiExceptionFilter]
 [Route("[controller]")]
 public class CatalogControllerBase : ControllerBase
 {
