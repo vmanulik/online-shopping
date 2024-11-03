@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CartService.Application.Common.Configurations;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence;
@@ -5,6 +7,7 @@ using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Repositories;
 using OnlineShopping.Shared.Infrastructure;
 using System.Reflection;
+using OnlineShopping.CartService.Configuration;
 
 namespace OnlineShopping.CartService
 {
@@ -18,12 +21,7 @@ namespace OnlineShopping.CartService
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwaggerDocumentation(builder.Configuration);
 
             app.UseHttpsRedirection();
 
@@ -37,9 +35,12 @@ namespace OnlineShopping.CartService
 
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
+            builder.Services.ConfigureApiVersioning();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
             builder.Services.AddSingleton<ICartServiceDbContext, CartServiceDbContext>();
             builder.Services.AddScoped(typeof(ILiteDbRepository<>), typeof(Repository<>));

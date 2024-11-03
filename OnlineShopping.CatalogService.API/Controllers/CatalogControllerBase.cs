@@ -6,7 +6,7 @@ namespace OnlineShopping.CatalogService.API;
 
 [ApiController]
 [ApiExceptionFilter]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class CatalogControllerBase : ControllerBase
 {
     private ISender? _mediator;

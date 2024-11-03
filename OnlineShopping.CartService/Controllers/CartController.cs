@@ -6,8 +6,9 @@ using OnlineShopping.CatalogService.API;
 
 namespace OnlineShopping.CartService.API
 {
+    [ApiVersion("1.0")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")] 
     public class CartController : CartControllerBase
     {
         private readonly ILogger<CartController> _logger;
@@ -36,6 +37,7 @@ namespace OnlineShopping.CartService.API
             return NoContent();
         }
 
+        [ApiVersion("2.0")]
         [HttpPut("{id}/items/{itemId}/remove")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveItemFromCart([FromRoute] Guid id, [FromRoute] int itemId)
