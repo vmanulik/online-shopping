@@ -43,7 +43,7 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Category>> UpdateCategory([FromRoute] int id, [FromBody] UpdateCategoryCommand command)
         {
@@ -54,16 +54,16 @@ namespace OnlineShopping.CatalogService.API
 
             await Mediator.Send(command);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<Category>> DeleteCategory([FromRoute] int id)
         {
             await Mediator.Send(new DeleteCategoryCommand(id));
 
-            return Ok();
+            return NoContent();
         }
     }
 }
