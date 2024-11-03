@@ -16,6 +16,7 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Category>>> GetCategories()
         {
             var categories = await Mediator.Send(new GetCategoriesQuery());
@@ -24,6 +25,7 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Category>> GetCategory([FromRoute] int id)
         {
             var category = await Mediator.Send(new GetCategoryQuery(id));
@@ -32,6 +34,7 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpPost()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<int>> CreateCategory([FromBody] CreateCategoryCommand command)
         {
             int id = await Mediator.Send(command);
@@ -40,6 +43,8 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Category>> UpdateCategory([FromRoute] int id, [FromBody] UpdateCategoryCommand command)
         {
             if (id != command.Id)
@@ -53,6 +58,7 @@ namespace OnlineShopping.CatalogService.API
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Category>> DeleteCategory([FromRoute] int id)
         {
             await Mediator.Send(new DeleteCategoryCommand(id));
