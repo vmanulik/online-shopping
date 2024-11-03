@@ -1,26 +1,31 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using OnlineShopping.CartService.Application.DTOs;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CartService.API.Queries;
 
-public record GetCartItemsQuery(Guid Id) : IRequest<List<Item>>;
+public record GetCartItemsQuery(Guid Id) : IRequest<List<ItemDTO>>;
 
-public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQuery, List<Item>>
+public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQuery, List<ItemDTO>>
 {
+    private readonly IMapper _mapper;
     private readonly ILiteDbRepository<Cart> _cartRepository;
     private readonly ILiteDbRepository<Item> _itemRepository;
 
     public GetCartItemsQueryHandler(
-            ILiteDbRepository<Cart> cartRepository,
-            ILiteDbRepository<Item> itemRepository)
+        IMapper mapper,
+        ILiteDbRepository<Cart> cartRepository,
+        ILiteDbRepository<Item> itemRepository)
     {
+        _mapper = mapper;
         _cartRepository = cartRepository;
         _itemRepository = itemRepository;
     }
 
-    public async Task<List<Item>> Handle(GetCartItemsQuery request, CancellationToken cancellationToken)
+    public async Task<List<ItemDTO>> Handle(GetCartItemsQuery request, CancellationToken cancellationToken)
     {
         var carts = _cartRepository.GetAllAsQueryable();
         var cart = await _cartRepository.GetByGuidAsync(request.Id);
@@ -34,6 +39,6 @@ public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQuery, List<
             .Where(x => x.CartId == request.Id)
             .ToList();
 
-        return items;
+        return _mapper.Map<List<ItemDTO>>(items);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CartService.API.Commands;
 using OnlineShopping.CartService.API.Queries;
-using OnlineShopping.CartService.Domain.Entities;
+using OnlineShopping.CartService.Application.DTOs;
 using OnlineShopping.CatalogService.API;
-using OnlineShopping.Shared.Infrastructure;
 
 namespace OnlineShopping.CartService.API
 {
@@ -12,22 +11,16 @@ namespace OnlineShopping.CartService.API
     public class CartController : CartControllerBase
     {
         private readonly ILogger<CartController> _logger;
-        private readonly ILiteDbRepository<Cart> _cartRepository;
-        private readonly ILiteDbRepository<Item> _itemRepository;
 
         public CartController(
-            ILogger<CartController> logger,
-            ILiteDbRepository<Cart> cartRepository,
-            ILiteDbRepository<Item> itemRepository)
+            ILogger<CartController> logger)
         {
             _logger = logger;
-            _cartRepository = cartRepository;
-            _itemRepository = itemRepository;
         }
 
         [HttpGet("{id}/items")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<Item>>> GetCartItems([FromRoute] Guid id)
+        public async Task<ActionResult<List<ItemDTO>>> GetCartItems([FromRoute] Guid id)
         {
             var items = await Mediator.Send(new GetCartItemsQuery(id));
 

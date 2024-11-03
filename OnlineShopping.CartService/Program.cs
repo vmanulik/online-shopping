@@ -1,3 +1,4 @@
+using OnlineShopping.CartService.Application.Common.Configurations;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
@@ -46,6 +47,11 @@ namespace OnlineShopping.CartService
             builder.Services.Configure<LiteDbOptions>(
                 builder.Configuration.GetSection("LiteDbOptions")
             );
+
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
 
             builder.Services.AddMediatR(cfg =>
             {

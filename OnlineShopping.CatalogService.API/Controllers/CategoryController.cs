@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Application.Categories.Commands;
+using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Categories.Queries;
 
 namespace OnlineShopping.CatalogService.API
@@ -17,7 +17,7 @@ namespace OnlineShopping.CatalogService.API
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<Category>>> GetCategories()
+        public async Task<ActionResult<List<CategoryDTO>>> GetCategories()
         {
             var categories = await Mediator.Send(new GetCategoriesQuery());
 
@@ -26,7 +26,7 @@ namespace OnlineShopping.CatalogService.API
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Category>> GetCategory([FromRoute] int id)
+        public async Task<ActionResult<CategoryDTO>> GetCategory([FromRoute] int id)
         {
             var category = await Mediator.Send(new GetCategoryQuery(id));
 

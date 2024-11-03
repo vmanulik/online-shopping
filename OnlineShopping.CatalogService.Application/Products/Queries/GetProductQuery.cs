@@ -1,23 +1,28 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
+using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.Shared.Infrastructure;
 using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CatalogService.Application.Products.Queries;
 
-public record GetProductQuery(int Id) : IRequest<Product>;
+public record GetProductQuery(int Id) : IRequest<ProductDTO>;
 
-public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Product>
+public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDTO>
 {
+    private readonly IMapper _mapper;
     private readonly ISharedRepository<Product> _productRepository;
 
     public GetProductQueryHandler(
-            ISharedRepository<Product> productRepository)
+        IMapper mapper,
+        ISharedRepository<Product> productRepository)
     {
+        _mapper = mapper;
         _productRepository = productRepository;
     }
 
-    public async Task<Product> Handle(GetProductQuery request, CancellationToken cancellationToken)
+    public async Task<ProductDTO> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(request.Id, cancellationToken);
         if (product == null)
@@ -25,6 +30,6 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Product>
             throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Product)}");
         }
 
-        return product;
+        return _mapper.Map<ProductDTO>(product);
     }
 }
