@@ -18,9 +18,9 @@ namespace OnlineShopping.CatalogService.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ProductDTO>>> GetProducts([FromQuery] SieveInputModel sieveInput)
+        public async Task<ActionResult<List<ProductDTO>>> GetProducts([FromQuery] SieveInputModel sieveInput, [FromQuery] PaginationModel pagination)
         {
-            var categories = await Mediator.Send(new GetProductsQuery(sieveInput));
+            var categories = await Mediator.Send(new GetProductsQuery(sieveInput, pagination));
 
             return Ok(categories);
         }

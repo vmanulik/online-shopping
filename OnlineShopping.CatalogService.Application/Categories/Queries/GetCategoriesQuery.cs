@@ -2,29 +2,44 @@
 using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
+using OnlineShopping.CatalogService.Application.Common.Models;
 using OnlineShopping.Shared.Infrastructure;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace OnlineShopping.CatalogService.Application.Categories.Queries;
 
-public record GetCategoriesQuery() : IRequest<List<CategoryDTO>>;
+public record GetCategoriesQuery(SieveInputModel SieveInput, PaginationModel Pagination) : IRequest<List<CategoryDTO>>;
 
 public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, List<CategoryDTO>>
 {
     private readonly IMapper _mapper;
+    private readonly SieveProcessor _sieveProcessor;
     private readonly ISharedRepository<Category> _categoryRepository;
 
     public GetCategoriesQueryHandler(
         IMapper mapper,
+        SieveProcessor sieveProcessor,
         ISharedRepository<Category> categoryRepository)
     {
         _mapper = mapper;
+        _sieveProcessor = sieveProcessor;
         _categoryRepository = categoryRepository;
     }
 
     public async Task<List<CategoryDTO>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var categories = await _categoryRepository.GetAllAsync();
+        var sieveModel = new SieveModel
+        {
+            Filters = request.SieveInput.Filter,
+            Sorts = request.SieveInput.Sort,
+            Page = request.Pagination.PageNumber,
+            PageSize = request.Pagination.PageSize,
+        };
 
-        return _mapper.Map<List<CategoryDTO>>(categories);
+        var categories = _categoryRepository.GetAllAsQueryable();
+        var filteredCategories = _sieveProcessor.Apply(sieveModel, categories);
+
+        return _mapper.Map<List<CategoryDTO>>(filteredCategories);
     }
 }

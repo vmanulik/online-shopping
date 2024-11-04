@@ -2,6 +2,7 @@
 using OnlineShopping.CatalogService.Application.Categories.Commands;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Categories.Queries;
+using OnlineShopping.CatalogService.Application.Common.Models;
 
 namespace OnlineShopping.CatalogService.API.Controllers
 {
@@ -17,9 +18,9 @@ namespace OnlineShopping.CatalogService.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<CategoryDTO>>> GetCategories()
+        public async Task<ActionResult<List<CategoryDTO>>> GetCategories([FromQuery] SieveInputModel sieveInput, [FromQuery] PaginationModel pagination)
         {
-            var categories = await Mediator.Send(new GetCategoriesQuery());
+            var categories = await Mediator.Send(new GetCategoriesQuery(sieveInput, pagination));
 
             return Ok(categories);
         }

@@ -9,7 +9,7 @@ using Sieve.Services;
 
 namespace OnlineShopping.CatalogService.Application.Products.Queries;
 
-public record GetProductsQuery(SieveInputModel SieveInput) : IRequest<List<ProductDTO>>;
+public record GetProductsQuery(SieveInputModel SieveInput, PaginationModel Pagination) : IRequest<List<ProductDTO>>;
 
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<ProductDTO>>
 {
@@ -33,6 +33,8 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<Pr
         {
             Filters = request.SieveInput.Filter,
             Sorts = request.SieveInput.Sort,
+            Page = request.Pagination.PageNumber,
+            PageSize = request.Pagination.PageSize,
         };
 
         var products = _productRepository.GetAllAsQueryable();

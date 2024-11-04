@@ -1,3 +1,3 @@
 ﻿namespace OnlineShopping.CatalogService.Application.Common.Models;
 
-public record SieveInputModel(string? Filter, string? Sort);
+public record PaginationModel(int PageNumber = 1, int PageSize = 10);
