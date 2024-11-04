@@ -14,15 +14,18 @@ public record GetProductsQuery(SieveInputModel SieveInput, PaginationModel Pagin
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<ProductDTO>>
 {
     private readonly IMapper _mapper;
+   // private readonly ILinksService _linksService;
     private readonly SieveProcessor _sieveProcessor;
     private readonly ISharedRepository<Product> _productRepository;
 
     public GetProductsQueryHandler(
         IMapper mapper,
+        //ILinksService linksService,
         SieveProcessor sieveProcessor,
         ISharedRepository<Product> productRepository)
     {
         _mapper = mapper;
+        //_linksService = linksService;
         _sieveProcessor = sieveProcessor;
         _productRepository = productRepository;
     }

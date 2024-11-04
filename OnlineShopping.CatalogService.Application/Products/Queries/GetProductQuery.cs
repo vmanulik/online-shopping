@@ -2,6 +2,7 @@
 using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
+using OnlineShopping.CatalogService.Application.Common.Interfaces;
 using OnlineShopping.Shared.Infrastructure;
 using Shared.Domain.Exceptions;
 
@@ -12,13 +13,16 @@ public record GetProductQuery(int Id) : IRequest<ProductDTO>;
 public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDTO>
 {
     private readonly IMapper _mapper;
+    private readonly ILinksService<ProductDTO> _linksService;
     private readonly ISharedRepository<Product> _productRepository;
 
     public GetProductQueryHandler(
         IMapper mapper,
+        ILinksService<ProductDTO> linksService,
         ISharedRepository<Product> productRepository)
     {
         _mapper = mapper;
+        _linksService = linksService;
         _productRepository = productRepository;
     }
 
@@ -30,6 +34,9 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDT
             throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Product)}");
         }
 
-        return _mapper.Map<ProductDTO>(product);
+        var dto = _mapper.Map<ProductDTO>(product);
+        var dtoWithLinks = _linksService.CreateLinks(dto, nameof(Product));
+
+        return dtoWithLinks;
     }
 }

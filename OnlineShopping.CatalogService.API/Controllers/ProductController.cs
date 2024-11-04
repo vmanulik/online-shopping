@@ -16,7 +16,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet(Name = nameof(GetProducts))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<ProductDTO>>> GetProducts([FromQuery] SieveInputModel sieveInput, [FromQuery] PaginationModel pagination)
         {
@@ -25,17 +25,17 @@ namespace OnlineShopping.CatalogService.API.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetProduct))]
         [ResponseCache(CacheProfileName = "Product")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<ProductDTO>> GetProduct([FromRoute] int id)
         {
-            var Product = await Mediator.Send(new GetProductQuery(id));
+            var product = await Mediator.Send(new GetProductQuery(id));
 
-            return Ok(Product);
+            return Ok(product);
         }
 
-        [HttpPost]
+        [HttpPost(Name = nameof(CreateProduct))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateProduct([FromBody] CreateProductCommand command)
         {
@@ -44,7 +44,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id });
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = nameof(UpdateProduct))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateProduct([FromRoute] int id, [FromBody] UpdateProductCommand command)
@@ -59,7 +59,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = nameof(DeleteProduct))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {

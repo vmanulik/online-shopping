@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using OnlineShopping.CatalogService.Application;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
@@ -44,7 +45,7 @@ namespace OnlineShopping.CatalogService.API
 
                 await dbInitializator.InitialiseAsync();
             }
-
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

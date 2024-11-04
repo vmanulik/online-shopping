@@ -1,6 +1,6 @@
 ﻿namespace OnlineShopping.CatalogService.Application.Categories.DTOs;
 
-public record ProductDTO
+public class ProductDTO : WithLinksDTO
 {
     public string Name { get; private set; }
     public string? ImageUrl { get; private set; }
