@@ -13,32 +13,23 @@ public class GetCartItemsQueryHandler : IRequestHandler<GetCartItemsQuery, List<
 {
     private readonly IMapper _mapper;
     private readonly ILiteDbRepository<Cart> _cartRepository;
-    private readonly ILiteDbRepository<Item> _itemRepository;
 
     public GetCartItemsQueryHandler(
         IMapper mapper,
-        ILiteDbRepository<Cart> cartRepository,
-        ILiteDbRepository<Item> itemRepository)
+        ILiteDbRepository<Cart> cartRepository)
     {
         _mapper = mapper;
         _cartRepository = cartRepository;
-        _itemRepository = itemRepository;
     }
 
     public async Task<List<ItemDTO>> Handle(GetCartItemsQuery request, CancellationToken cancellationToken)
     {
-        var carts = _cartRepository.GetAllAsQueryable();
-        var cart = await _cartRepository.GetByGuidAsync(request.Id);
+        var cart = await _cartRepository.GetByGuidWithIncludeAsync(request.Id, x => x.Items);
         if (cart == null)
         {
             throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Cart)}");
         }
 
-        var items = _itemRepository
-            .GetAllAsQueryable()
-            .Where(x => x.CartId == request.Id)
-            .ToList();
-
-        return _mapper.Map<List<ItemDTO>>(items);
+        return _mapper.Map<List<ItemDTO>>(cart.Items);
     }
 }

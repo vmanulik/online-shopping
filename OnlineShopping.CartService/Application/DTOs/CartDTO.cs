@@ -3,5 +3,5 @@
 public record CartDTO
 {
     public Guid Id { get; private set; }
-    public int Quantity { get; set; }
+    public int ItemsQuantity { get; set; }
 }

@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using MediatR;
+﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure;
 
@@ -24,26 +23,22 @@ public class AddItemToCartCommandHandler : IRequestHandler<AddItemToCartCommand>
 
     public async Task Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
     {
-        Cart cart = await _cartRepository.GetByGuidAsync(request.Id);
+        Cart cart = await _cartRepository.GetByGuidWithIncludeAsync(request.Id, x => x.Items);
         if (cart == null)
         {
             cart = new Cart(request.Id);
-            await _cartRepository.AddAsync(cart);
 
             request.Item.SetCart(cart.Id);
-            await _itemRepository.AddAsync(request.Item);
+            cart.AddItem(request.Item);
+
+            await _cartRepository.AddAsync(cart);
         }
         else
         {
-            var items = _itemRepository
-                .GetAllAsQueryable()
-                .Where(x => x.CartId == request.Id);
-            cart.Items = items.ToList();
-
+            request.Item.SetCart(cart.Id);
             cart.AddItem(request.Item);
 
-            var item = cart.Items.Single(x => x.Id == request.Item.Id);
-            await _itemRepository.UpdateAsync(item);
+            await _cartRepository.UpdateAsync(cart);
         }
     }
 }

@@ -2,6 +2,7 @@
 using LiteDB.Queryable;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.Shared.Infrastructure;
+using System.Linq.Expressions;
 
 namespace OnlineShopping.CartService.Infrastructure.Repositories;
 
@@ -40,6 +41,14 @@ public class Repository<T> : ILiteDbRepository<T> where T : new()
     {
         return _dbContext.Database
             .GetCollection<T>(nameof(T))
+            .FindByIdAsync(id);
+    }
+
+    public Task<T> GetByGuidWithIncludeAsync<K>(Guid id, Expression<Func<T, K>> includeClause)
+    {
+        return _dbContext.Database
+            .GetCollection<T>(nameof(T))
+            .Include(includeClause)
             .FindByIdAsync(id);
     }
 

@@ -24,21 +24,14 @@ public class RemoveItemFromCartCommandHandler : IRequestHandler<RemoveItemFromCa
 
     public async Task Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken)
     {
-        Cart cart = await _cartRepository.GetByGuidAsync(request.Id);
+        var cart = await _cartRepository.GetByGuidWithIncludeAsync(request.Id, x => x.Items);
         if (cart == null)
         {
             throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Cart)}");
         }
 
-        var item = _itemRepository
-            .GetAllAsQueryable()
-            .Where(x => x.CartId == request.Id);
-        if (item == null)
-        {
-            throw new NotFoundException($"Item ID {request.ItemId} was not found in the {nameof(item)}");
-        }
+        cart.RemoveItem(request.ItemId);
 
-
-        await _itemRepository.RemoveByIdAsync(request.ItemId);
+        await _cartRepository.UpdateAsync(cart);
     }
 }

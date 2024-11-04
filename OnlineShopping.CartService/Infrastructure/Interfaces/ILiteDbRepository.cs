@@ -1,4 +1,6 @@
-﻿namespace OnlineShopping.Shared.Infrastructure
+﻿using System.Linq.Expressions;
+
+namespace OnlineShopping.Shared.Infrastructure
 {
     public interface ILiteDbRepository<T> where T : new()
     {
@@ -9,6 +11,8 @@
         Task<T> GetByIdAsync(int id);
 
         Task<T> GetByGuidAsync(Guid id);
+
+        Task<T> GetByGuidWithIncludeAsync<K>(Guid id, Expression<Func<T, K>> includeClause);
 
         Task AddAsync(T entity);
 
