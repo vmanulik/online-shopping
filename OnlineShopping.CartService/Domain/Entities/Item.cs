@@ -1,10 +1,13 @@
-﻿using OnlineShopping.Shared.Domain.Entities;
+﻿using LiteDB;
+using OnlineShopping.Shared.Domain.Entities;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
 public class Item : BaseEntity
 {
+    [BsonId]
     public Guid CartId { get; private set; }
+
     public string Name { get; init; }
     public string? ImageUrl { get; init; }
     public string? ImageDescription { get; init; }

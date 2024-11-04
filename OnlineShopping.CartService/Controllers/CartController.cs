@@ -19,11 +19,11 @@ namespace OnlineShopping.CartService.API
             _logger = logger;
         }
 
-        [HttpGet("{id}/items")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ItemDTO>>> GetCartItems([FromRoute] Guid id)
+        public async Task<ActionResult<CartDTO>> GetCartInfo([FromRoute] Guid id)
         {
-            var items = await Mediator.Send(new GetCartItemsQuery(id));
+            var items = await Mediator.Send(new GetCartInfoQuery(id));
 
             return Ok(items);
         }
@@ -37,7 +37,6 @@ namespace OnlineShopping.CartService.API
             return NoContent();
         }
 
-        [ApiVersion("2.0")]
         [HttpPut("{id}/items/{itemId}/remove")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveItemFromCart([FromRoute] Guid id, [FromRoute] int itemId)
@@ -45,6 +44,16 @@ namespace OnlineShopping.CartService.API
             await Mediator.Send(new RemoveItemFromCartCommand(id, itemId));
 
             return NoContent();
+        }
+
+        [ApiVersion("2.0")]
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<ItemDTO>>> GetCartItems([FromRoute] Guid id)
+        {
+            var items = await Mediator.Send(new GetCartItemsQuery(id));
+
+            return Ok(items);
         }
     }
 }

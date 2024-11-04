@@ -5,6 +5,7 @@ namespace OnlineShopping.CartService.Domain.Entities;
 
 public class Cart
 {
+    [BsonId]
     public Guid Id { get; set; }
 
     public List<Item> Items { get; set; } = new();
