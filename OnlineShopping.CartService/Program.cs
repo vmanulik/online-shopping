@@ -8,6 +8,7 @@ using OnlineShopping.CartService.Infrastructure.Repositories;
 using OnlineShopping.Shared.Infrastructure;
 using System.Reflection;
 using OnlineShopping.CartService.Configuration;
+using Microsoft.OpenApi.Models;
 
 namespace OnlineShopping.CartService
 {

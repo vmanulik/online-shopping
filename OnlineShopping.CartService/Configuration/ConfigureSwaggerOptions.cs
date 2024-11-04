@@ -34,7 +34,13 @@ public class ConfigureSwaggerOptions : IConfigureNamedOptions<SwaggerGenOptions>
         var info = new OpenApiInfo()
         {
             Title = "OnlineShopping CartService API",
-            Version = desc.ApiVersion.ToString()
+            Version = desc.ApiVersion.ToString(),
+            TermsOfService = new Uri("https://example.com/terms"),
+            License = new OpenApiLicense
+            {
+                Name = "MIT License",
+                Url = new Uri("https://opensource.org/license/mit")
+            }
         };
 
         if (desc.IsDeprecated)

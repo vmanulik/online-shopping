@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.OpenApi.Models;
 using OnlineShopping.CatalogService.Application;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
@@ -27,9 +28,22 @@ namespace OnlineShopping.CatalogService.API
                     });
             });
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Online Shopping API",
+                    Description = "API for managing Products and Categories items",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    License = new OpenApiLicense
+                    {
+                        Name = "MIT License",
+                        Url = new Uri("https://opensource.org/license/mit")
+                    }
+                });
+            });
 
             builder.Services.AddCatalogInfrastructureServices(builder.Configuration);
             builder.Services.AddCatalogServiceApplicationServices(builder.Configuration);
