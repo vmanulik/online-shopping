@@ -26,6 +26,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ResponseCache(CacheProfileName = "Category")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CategoryDTO>> GetCategory([FromRoute] int id)
         {

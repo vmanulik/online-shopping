@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CatalogService.Application;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
@@ -10,9 +11,21 @@ namespace OnlineShopping.CatalogService.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.CacheProfiles.Add("Category",
+                    new CacheProfile()
+                    {
+                        Duration = 600
+                    }); 
+                options.CacheProfiles.Add("Product",
+                    new CacheProfile()
+                    {
+                        Duration = 60
+                    });
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -42,7 +55,7 @@ namespace OnlineShopping.CatalogService.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseResponseCaching(); 
 
             app.MapControllers();
 
