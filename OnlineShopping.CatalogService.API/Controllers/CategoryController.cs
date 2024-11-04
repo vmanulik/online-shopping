@@ -3,7 +3,7 @@ using OnlineShopping.CatalogService.Application.Categories.Commands;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Categories.Queries;
 
-namespace OnlineShopping.CatalogService.API
+namespace OnlineShopping.CatalogService.API.Controllers
 {
     public class CategoryController : CatalogControllerBase
     {

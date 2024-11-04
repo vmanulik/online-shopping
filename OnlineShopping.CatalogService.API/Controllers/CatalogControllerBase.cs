@@ -2,7 +2,7 @@
 using MediatR;
 using OnlineShopping.Shared.Application.Filters;
 
-namespace OnlineShopping.CatalogService.API;
+namespace OnlineShopping.CatalogService.API.Controllers;
 
 [ApiController]
 [ApiExceptionFilter]

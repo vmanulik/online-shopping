@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
+using OnlineShopping.CatalogService.Application.Common.Models;
 using OnlineShopping.CatalogService.Application.Products.Commands;
 using OnlineShopping.CatalogService.Application.Products.Queries;
 
-namespace OnlineShopping.CatalogService.API
+namespace OnlineShopping.CatalogService.API.Controllers
 {
     public class ProductController : CatalogControllerBase
     {
@@ -17,9 +18,9 @@ namespace OnlineShopping.CatalogService.API
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ProductDTO>>> GetProducts()
+        public async Task<ActionResult<List<ProductDTO>>> GetProducts([FromQuery] SieveInputModel sieveInput)
         {
-            var categories = await Mediator.Send(new GetProductsQuery());
+            var categories = await Mediator.Send(new GetProductsQuery(sieveInput));
 
             return Ok(categories);
         }

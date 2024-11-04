@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
+using Sieve.Services;
 
 namespace OnlineShopping.CatalogService.Infrastructure;
 
@@ -18,7 +19,8 @@ public static class ConfigureServices
                 }
             ));
 
-        services.AddScoped<CatalogServiceDbContextInitializer>();
+        services.AddScoped<CatalogServiceDbContextInitializer>(); 
+        services.AddScoped<SieveProcessor>();
 
         return services;
     }
