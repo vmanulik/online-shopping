@@ -31,7 +31,6 @@ public class GetCartInfoQueryHandler : IRequestHandler<GetCartInfoQuery, CartDTO
         }
 
         var cartDTO = _mapper.Map<CartDTO>(cart);
-        cartDTO.ItemsQuantity = cart.Items.Sum(x => x.Quantity);
 
         return cartDTO;
     }
