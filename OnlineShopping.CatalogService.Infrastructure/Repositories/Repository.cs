@@ -24,11 +24,21 @@ public class Repository<T> : ISharedRepository<T> where T : BaseEntity
 
         return addedEntity.Entity.Id;
     }
+    
+    public void AddWithoutSave(T entity, CancellationToken cancellation = default)
+    {
+        _set.Add(entity);
+    }
 
     public async Task AddRangeAsync(IEnumerable<T> entities)
     {
-        _set.AddRange(entities);
+        await _set.AddRangeAsync(entities);
         await _context.SaveChangesAsync();
+    }
+
+    public void AddRangeWithoutSave(IEnumerable<T> entities)
+    {
+        _set.AddRange(entities);
     }
 
     public IQueryable<T> GetAllAsQueryable() => _set;
@@ -51,10 +61,20 @@ public class Repository<T> : ISharedRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync(cancellation);
     }
 
+    public void RemoveWithoutSave(T entity, CancellationToken cancellation)
+    {
+        _set.Remove(entity);
+    }
+
     public async Task RemoveRangeAsync(IEnumerable<T> entities)
     {
         _set.RemoveRange(entities);
         await _context.SaveChangesAsync();
+    } 
+
+    public void RemoveRangeWithoutSave(IEnumerable<T> entities)
+    {
+        _set.RemoveRange(entities);
     }
 
     public async Task SaveAsync()

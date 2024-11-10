@@ -2,10 +2,10 @@
 using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
+using OnlineShopping.CatalogService.Application.Common.Configurations.Sieve;
 using OnlineShopping.CatalogService.Application.Common.Models;
 using OnlineShopping.Shared.Infrastructure;
 using Sieve.Models;
-using Sieve.Services;
 
 namespace OnlineShopping.CatalogService.Application.Products.Queries;
 
@@ -14,18 +14,15 @@ public record GetProductsQuery(SieveInputModel SieveInput, PaginationModel Pagin
 public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<ProductDTO>>
 {
     private readonly IMapper _mapper;
-   // private readonly ILinksService _linksService;
-    private readonly SieveProcessor _sieveProcessor;
+    private readonly ProductSieveProcessor _sieveProcessor;
     private readonly ISharedRepository<Product> _productRepository;
 
     public GetProductsQueryHandler(
         IMapper mapper,
-        //ILinksService linksService,
-        SieveProcessor sieveProcessor,
+        ProductSieveProcessor sieveProcessor,
         ISharedRepository<Product> productRepository)
     {
         _mapper = mapper;
-        //_linksService = linksService;
         _sieveProcessor = sieveProcessor;
         _productRepository = productRepository;
     }

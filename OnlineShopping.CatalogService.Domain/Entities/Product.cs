@@ -1,18 +1,15 @@
 ﻿using OnlineShopping.Shared.Domain.Entities;
-using Sieve.Attributes;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
 public class Product : BaseEntity
 {
-    [Sieve(CanSort = true)]
     public string Name { get; private set; }
 
     public string? ImageUrl { get; private set; }
     public string? ImageDescription { get; private set; }
     public decimal Price { get; private set; }
 
-    [Sieve(CanFilter = true, CanSort = true)]
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
 

@@ -1,5 +1,4 @@
 ﻿using OnlineShopping.Shared.Domain.Entities;
-using Sieve.Attributes;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
@@ -8,7 +7,6 @@ public class Category : BaseEntity
     private readonly List<Product> _products = new();
     private readonly List<Category> _subCategories = new();
 
-    [Sieve(CanFilter = true, CanSort = true)]
     public string Name { get; private set; }
     public string? ImageUrl { get; private set; }
 

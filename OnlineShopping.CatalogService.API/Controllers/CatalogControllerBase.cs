@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.Shared.Application.Filters;
 
 namespace OnlineShopping.CatalogService.API.Controllers;

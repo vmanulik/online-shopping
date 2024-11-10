@@ -20,7 +20,6 @@ public static class ConfigureServices
             ));
 
         services.AddScoped<CatalogServiceDbContextInitializer>(); 
-        services.AddScoped<SieveProcessor>();
 
         return services;
     }

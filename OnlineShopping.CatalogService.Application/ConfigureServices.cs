@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShopping.CatalogService.Application.Common.Configurations;
+using OnlineShopping.CatalogService.Application.Common.Configurations.Sieve;
 using OnlineShopping.CatalogService.Application.Common.Interfaces;
 using OnlineShopping.CatalogService.Application.Common.Services;
 using OnlineShopping.CatalogService.Infrastructure.Repositories;
@@ -17,6 +18,9 @@ public static class ConfigureServices
 
         services.AddScoped(typeof(ILinksService<>), typeof(LinksService<>));
         services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
+
+        services.AddTransient<CategorySieveProcessor>();
+        services.AddTransient<ProductSieveProcessor>();
 
         services.AddAutoMapper(cfg =>
         {

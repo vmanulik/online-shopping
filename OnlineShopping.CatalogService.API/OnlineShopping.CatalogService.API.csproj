@@ -13,13 +13,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineShopping.CatalogService.Application\OnlineShopping.CatalogService.Application.csproj" />
     <ProjectReference Include="..\OnlineShopping.CatalogService.Infrastructure\OnlineShopping.CatalogService.Infrastructure.csproj" />
-    <ProjectReference Include="..\OnlineShopping.Shared\OnlineShopping.Shared.csproj" />
   </ItemGroup>
 
 </Project>
