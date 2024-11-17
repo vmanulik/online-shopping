@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
-using Sieve.Services;
 
 namespace OnlineShopping.CatalogService.Infrastructure;
 

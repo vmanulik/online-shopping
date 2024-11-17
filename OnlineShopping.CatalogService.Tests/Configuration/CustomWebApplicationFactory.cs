@@ -17,11 +17,11 @@ public class CustomWebApplicationFactory<TProgram>
         {
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<CatalogServiceDbContext>));
-            services.Remove(dbContextDescriptor);
+            services.Remove(dbContextDescriptor!);
 
             var dbConnectionDescriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbConnection));
-            services.Remove(dbConnectionDescriptor);
+            services.Remove(dbConnectionDescriptor!);
 
             services.AddSingleton<DbConnection>(container =>
             {
