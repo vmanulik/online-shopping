@@ -1,10 +1,12 @@
 using OnlineShopping.CartService.Application.Common.Configurations;
+using OnlineShopping.CartService.BackgroundServices;
 using OnlineShopping.CartService.Configuration;
 using OnlineShopping.CartService.Infrastructure;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Repositories;
+using OnlineShopping.Shared.Infrastructure.Persistence.Options;
 using System.Reflection;
 
 namespace OnlineShopping.CartService
@@ -44,9 +46,13 @@ namespace OnlineShopping.CartService
             builder.Services.AddScoped(typeof(ILiteDbRepository<>), typeof(Repository<>));
 
             builder.Services.AddScoped<IRabbitMqListener, RabbitMqListener>();
+            builder.Services.AddHostedService<IntegrationEventListenerService>();
 
             builder.Services.Configure<LiteDbOptions>(
-                builder.Configuration.GetSection("LiteDbOptions")
+                builder.Configuration.GetSection(nameof(LiteDbOptions))
+            );
+            builder.Services.Configure<RabbitMqOptions>(
+                builder.Configuration.GetSection(nameof(RabbitMqOptions))
             );
 
             builder.Services.AddAutoMapper(cfg =>

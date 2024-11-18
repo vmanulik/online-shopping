@@ -1,28 +1,30 @@
-﻿using Microsoft.Extensions.Options;
+﻿using LiteDB.Queryable;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CartService.Infrastructure;
+using OnlineShopping.Shared.Domain.Events;
 using OnlineShopping.Shared.Infrastructure.Persistence.Options;
+using RabbitMQ.Client.Events;
+using System.Text;
 
 namespace OnlineShopping.CartService.BackgroundServices;
 
 public class IntegrationEventListenerService : BackgroundService
 {
     private readonly IServiceScope _scope;
-    private readonly IRabbitMqListener _rabbitMqListener;
+
+    private readonly IRabbitMqListener _rabbitMqListener; 
+    private readonly ILiteDbRepository<Cart> _cartRepository;
 
     public IntegrationEventListenerService(IServiceScopeFactory scopeFactory)
     {
         _scope = scopeFactory.CreateScope();
 
-        _rabbitMqListener.ReceivedAsync += (model, eventArgs) =>
-        {
-            //var body = eventArgs.Body.ToArray();
+        _rabbitMqListener = _scope.ServiceProvider.GetRequiredService<IRabbitMqListener>();
+        _rabbitMqListener.ReceivedAsync += ProcessMessage;
 
-            //var message = Encoding.UTF8.GetString(body);
-
-            // TODO Process
-
-            return Task.CompletedTask;
-        };
+        _cartRepository = _scope.ServiceProvider.GetRequiredService<ILiteDbRepository<Cart>>();
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellation)
@@ -33,7 +35,7 @@ public class IntegrationEventListenerService : BackgroundService
         {
             while (!cancellation.IsCancellationRequested)
             {
-                // TODO Process
+                await _rabbitMqListener.BasicConsumeAsync(Events.ProductUpdate, cancellation);
 
                 await Task.Delay(options.EventFetchPeriod, cancellation);
             }
@@ -42,6 +44,35 @@ public class IntegrationEventListenerService : BackgroundService
         {
             Console.WriteLine(e.ToString());
             await Task.Delay(5 * options.EventFetchPeriod, cancellation);
+        }
+    }
+
+    private async Task ProcessMessage(object model, BasicDeliverEventArgs eventArgs)
+    {
+        var body = eventArgs.Body.ToArray(); 
+        var message = Encoding.UTF8.GetString(body);
+
+        var template = new
+        {
+            Id = default(int),
+            Name = string.Empty,
+            ImageUrl = default(string?),
+            ImageDescription = default(string?),
+            Price = default(decimal),
+            CategoryId = default(int)
+        };
+        var product = JsonConvert.DeserializeAnonymousType(message, template);
+
+        var carts = _cartRepository.GetAllAsQueryable();
+
+        foreach (var cart in carts)
+        {
+            var item = cart.Items.SingleOrDefault(x => x.Id == product.Id);
+            if(item != null)
+            {
+                item.Change(product.Name, product.ImageUrl, product.ImageDescription, product.Price);
+                await _cartRepository.UpdateAsync(cart);
+            }
         }
     }
 }
