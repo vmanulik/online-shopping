@@ -48,10 +48,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             { 
                 product.Update(request.Name, request.ImageUrl, request.ImageDescription, request.Price, request.CategoryId);
 
-                JsonSerializerOptions options = new()
-                {
-                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                };
                 var message = new IntegrationEvent()
                 {
                     Name = Events.ProductUpdate,
