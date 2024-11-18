@@ -4,7 +4,9 @@ using OnlineShopping.CatalogService.Application.Common.Configurations;
 using OnlineShopping.CatalogService.Application.Common.Configurations.Sieve;
 using OnlineShopping.CatalogService.Application.Common.Interfaces;
 using OnlineShopping.CatalogService.Application.Common.Services;
+using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.CatalogService.Infrastructure.Repositories;
+using OnlineShopping.CatalogService.Infrastructure.UnitOfWork;
 using OnlineShopping.Shared.Infrastructure.Abstraction;
 using System.Reflection;
 
@@ -18,6 +20,7 @@ public static class ConfigureServices
 
         services.AddScoped(typeof(ILinksService<>), typeof(LinksService<>));
         services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddTransient<CategorySieveProcessor>();
         services.AddTransient<ProductSieveProcessor>();

@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure.Messaging;
+using OnlineShopping.CatalogService.Infrastructure.Repositories;
+using OnlineShopping.Shared.Infrastructure.Abstraction;
 
 namespace OnlineShopping.CatalogService.Infrastructure;
 
@@ -21,6 +23,8 @@ public static class ConfigureServices
             ));
 
         services.AddScoped<CatalogServiceDbContextInitializer>();
+        services.AddScoped<ICatalogServiceDbContext, CatalogServiceDbContext>();
+        services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
         services.AddScoped<IRabbitMqService, RabbitMqService>();
 
         return services;

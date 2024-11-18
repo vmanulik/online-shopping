@@ -3,6 +3,9 @@ using Microsoft.OpenApi.Models;
 using OnlineShopping.CatalogService.Application;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace OnlineShopping.CatalogService.API
 {
@@ -46,6 +49,11 @@ namespace OnlineShopping.CatalogService.API
 
             builder.Services.AddCatalogInfrastructureServices(builder.Configuration);
             builder.Services.AddCatalogServiceApplicationServices(builder.Configuration);
+
+            builder.Services.Configure<JsonOptions>(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            });
 
             var app = builder.Build();
 

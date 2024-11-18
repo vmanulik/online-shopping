@@ -1,7 +1,11 @@
 ﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
-using OnlineShopping.Shared.Infrastructure.Abstraction;
+using OnlineShopping.CartService.Domain.Events;
+using OnlineShopping.CatalogService.Infrastracture.Interfaces;
+using OnlineShopping.Shared.Domain.Entities;
 using Shared.Domain.Exceptions;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace OnlineShopping.CatalogService.Application.Products.Commands;
 
@@ -15,33 +19,50 @@ public record UpdateProductCommand(
 
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
-    private readonly ISharedRepository<Product> _productRepository;
-    private readonly ISharedRepository<Category> _categoryRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public UpdateProductCommandHandler(
-            ISharedRepository<Product> productRepository,
-            ISharedRepository<Category> categoryRepository)
+            IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
-        _categoryRepository = categoryRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(request.Id, cancellationToken); 
+        var product = await _unitOfWork.Products.GetByIdAsync(request.Id, cancellationToken); 
         if (product == null)
         {
             throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Product)}");
         }
 
-        var category = await _categoryRepository.GetByIdAsync(request.CategoryId, cancellationToken);
+        var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId, cancellationToken);
         if (category == null)
         {
             throw new NotFoundException($"Category ID {request.CategoryId} was not found in the {nameof(Category)}");
         }
 
-        product.Update(request.Name, request.ImageUrl, request.ImageDescription, request.Price, request.CategoryId);
+        using (_unitOfWork.BeginTransactionAsync())
+        {
+            product.Update(request.Name, request.ImageUrl, request.ImageDescription, request.Price, request.CategoryId);
+            
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            };
+            var message = new IntegrationEvent()
+            {
+                Name = Events.ProductUpdate,
+                Data = JsonSerializer.Serialize(
+                            product, 
+                            options: new() {
+                                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                            }
+                        )
+            };
+            _unitOfWork.Events.AddWithoutSave(message);
 
-        await _productRepository.SaveAsync();
+            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitTransactionAsync();
+        }
     }
 }
