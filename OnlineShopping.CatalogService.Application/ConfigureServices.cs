@@ -5,7 +5,7 @@ using OnlineShopping.CatalogService.Application.Common.Configurations.Sieve;
 using OnlineShopping.CatalogService.Application.Common.Interfaces;
 using OnlineShopping.CatalogService.Application.Common.Services;
 using OnlineShopping.CatalogService.Infrastructure.Repositories;
-using OnlineShopping.Shared.Infrastructure;
+using OnlineShopping.Shared.Infrastructure.Abstraction;
 using System.Reflection;
 
 namespace OnlineShopping.CatalogService.Application;

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace OnlineShopping.Shared.Infrastructure
+namespace OnlineShopping.CartService.Infrastructure
 {
     public interface ILiteDbRepository<T> where T : new()
     {

@@ -3,7 +3,7 @@ using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Common.Interfaces;
-using OnlineShopping.Shared.Infrastructure;
+using OnlineShopping.Shared.Infrastructure.Abstraction;
 using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CatalogService.Application.Products.Queries;

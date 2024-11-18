@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.Shared.Domain.Entities;
-using OnlineShopping.Shared.Infrastructure;
+using OnlineShopping.Shared.Infrastructure.Abstraction;
 using Shared.Domain.Exceptions;
 
 namespace OnlineShopping.CatalogService.Infrastructure.Repositories;

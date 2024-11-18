@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
-using OnlineShopping.Shared.Infrastructure;
+using OnlineShopping.CartService.Infrastructure;
 
 namespace OnlineShopping.CartService.API.Commands;
 

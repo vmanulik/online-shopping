@@ -1,14 +1,11 @@
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CartService.Application.Common.Configurations;
+using OnlineShopping.CartService.Configuration;
+using OnlineShopping.CartService.Infrastructure;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Repositories;
-using OnlineShopping.Shared.Infrastructure;
 using System.Reflection;
-using OnlineShopping.CartService.Configuration;
-using Microsoft.OpenApi.Models;
 
 namespace OnlineShopping.CartService
 {

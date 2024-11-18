@@ -85,8 +85,8 @@ namespace OnlineShopping.CartService.Tests.UnitTests
             var items = _cart.GetItems();
 
             Assert.That(items.Count, Is.EqualTo(2));
-            Assert.Contains(item1, items);
-            Assert.Contains(item2, items);
+            Assert.That(items, Has.Member(item1));
+            Assert.That(items, Has.Member(item2));
         }
     }
 }
