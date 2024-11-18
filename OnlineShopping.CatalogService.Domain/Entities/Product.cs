@@ -2,7 +2,7 @@
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
-public class Product : BaseEntity
+public class Product : BaseAuditableEntity
 {
     public string Name { get; private set; }
 
@@ -22,6 +22,9 @@ public class Product : BaseEntity
         CategoryId = categoryId;
         ImageUrl = imageUrl;
         ImageDescription = imageDescription;
+
+        Created = DateTime.Now;
+        Version = 1;
     }
 
     public void Update(
@@ -36,5 +39,8 @@ public class Product : BaseEntity
         ImageDescription = imageDescription;
         Price = price;
         CategoryId = categoryId;
+
+        LastModified = DateTime.Now;
+        Version++;
     }
 }
