@@ -58,8 +58,7 @@ namespace OnlineShopping.CatalogService.API
             });
 
             builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
-            builder.Services.AddSingleton<IntegrationEventSenderService>();
-            builder.Services.AddHostedService<IntegrationEventSenderService>(provider => provider.GetService<IntegrationEventSenderService>());
+            builder.Services.AddHostedService<IntegrationEventSenderService>();
 
             builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(nameof(RabbitMqOptions)));
 
