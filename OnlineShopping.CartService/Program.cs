@@ -43,7 +43,7 @@ namespace OnlineShopping.CartService
             builder.Services.AddSingleton<ICartServiceDbContext, CartServiceDbContext>();
             builder.Services.AddScoped(typeof(ILiteDbRepository<>), typeof(Repository<>));
 
-            builder.Services.AddHostedService<RabbitMqListener>();
+            builder.Services.AddScoped<IRabbitMqListener, RabbitMqListener>();
 
             builder.Services.Configure<LiteDbOptions>(
                 builder.Configuration.GetSection("LiteDbOptions")

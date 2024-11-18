@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using OnlineShopping.CartService.Domain.Entities;
-using OnlineShopping.CartService.Domain.Events;
 using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.Shared.Domain.Entities;
+using OnlineShopping.Shared.Domain.Events;
 using Shared.Domain.Exceptions;
 using System.Data;
 using System.Text.Json;

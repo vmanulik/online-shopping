@@ -6,48 +6,68 @@ using System.Text;
 
 namespace OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 
-public class RabbitMqListener : BackgroundService
+public class RabbitMqListener : IRabbitMqListener, IDisposable
 {
     private IConnection _connection;
     private IChannel _channel;
+
+    private AsyncEventingBasicConsumer _consumer;
+
     private IOptions<RabbitMqOptions> _options;
+
+    public event AsyncEventHandler<BasicDeliverEventArgs> ReceivedAsync
+    {
+        add => _consumer.ReceivedAsync += value;
+        remove => _consumer.ReceivedAsync -= value;
+    }
 
     public RabbitMqListener(IOptions<RabbitMqOptions> options)
     {
         _options = options;
 
-        var factory = new ConnectionFactory { HostName = _options.Value.Url };
+        var factory = new ConnectionFactory()
+        {
+            HostName = _options.Value.Url,
+            VirtualHost = _options.Value.VirtualHost,
+            Port = _options.Value.Port,
+            UserName = _options.Value.UserName,
+            Password = _options.Value.Password
+        };
 
         _connection = factory.CreateConnectionAsync().Result;
         _channel = _connection.CreateChannelAsync().Result;
+        _consumer = new AsyncEventingBasicConsumer(_channel);
     }
 
-    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+    public async Task BasicConsumeAsync(string queue, CancellationToken cancellation)
     {
-        stoppingToken.ThrowIfCancellationRequested();
+        cancellation.ThrowIfCancellationRequested();
 
-        var consumer = new AsyncEventingBasicConsumer(_channel);
-        consumer.ReceivedAsync += (model, eventArgs) =>
+        await _channel.BasicConsumeAsync(queue, true, _consumer);
+    }
+
+    #region IDisposable
+
+    private bool _disposed;
+
+    protected void Dispose(bool disposing)
+    {
+        if (!this._disposed)
         {
-            var body = eventArgs.Body.ToArray();
-
-            var message = Encoding.UTF8.GetString(body);
-            
-            // TODO Process
-
-            return Task.CompletedTask;
-        };
-
-        await _channel.BasicConsumeAsync(_options.Value.Url, false, consumer);
-
-        return;
+            if (disposing)
+            {
+                _channel.Dispose();
+                _connection.Dispose();
+            }
+        }
+        this._disposed = true;
     }
 
-    public override void Dispose()
+    public void Dispose()
     {
-        _channel.Dispose();
-        _connection.Dispose();
-
-        base.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
+
+    #endregion
 }

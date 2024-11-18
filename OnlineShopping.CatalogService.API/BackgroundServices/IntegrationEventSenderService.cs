@@ -9,13 +9,11 @@ namespace OnlineShopping.CatalogService.API.BackgroundServices;
 
 public class IntegrationEventSenderService : BackgroundService
 {
-    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IServiceScope _scope;
 
     public IntegrationEventSenderService(IServiceScopeFactory scopeFactory)
     {
-        _scopeFactory = scopeFactory;
-        _scope = _scopeFactory.CreateScope();
+        _scope = scopeFactory.CreateScope();
 
         using var dbContext = _scope.ServiceProvider.GetRequiredService<ICatalogServiceDbContext>();
             dbContext.Database.EnsureCreated();   
