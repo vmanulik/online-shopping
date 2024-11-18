@@ -1,4 +1,4 @@
-﻿namespace OnlineShopping.Shared.Infrastructure
+﻿namespace OnlineShopping.Shared.Infrastructure.Abstraction
 {
     public interface ISharedRepository<T>
     {
