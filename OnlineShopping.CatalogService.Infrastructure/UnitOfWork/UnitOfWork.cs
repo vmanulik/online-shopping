@@ -1,15 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.Shared.Domain.Entities;
 using OnlineShopping.Shared.Infrastructure.Abstraction;
+using System.Data;
 
 namespace OnlineShopping.CatalogService.Infrastructure.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly ICatalogServiceDbContext _context;
-    private IDbContextTransaction _transaction;
 
     public UnitOfWork(
         ICatalogServiceDbContext context,
@@ -34,14 +35,9 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         return await _context.SaveChangesAsync(cancellation);
     }
 
-    public async Task BeginTransactionAsync(CancellationToken cancellation = default)
+    public async Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable, CancellationToken cancellation = default)
     {
-        _transaction = await _context.Database.BeginTransactionAsync();
-    }
-
-    public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        await _transaction.CommitAsync(cancellationToken);
+        return await _context.Database.BeginTransactionAsync(isolationLevel, cancellation);
     }
 
     #region IDisposable
@@ -55,7 +51,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
             if (disposing)
             {
                 _context.Dispose();
-                _transaction?.Dispose();
             }
         }
         this._disposed = true;

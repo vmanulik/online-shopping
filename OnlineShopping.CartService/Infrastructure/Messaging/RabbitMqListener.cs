@@ -16,7 +16,7 @@ public class RabbitMqListener : BackgroundService
     {
         _options = options;
 
-        var factory = new ConnectionFactory { HostName = _options.Value.ConnectionString };
+        var factory = new ConnectionFactory { HostName = _options.Value.Url };
 
         _connection = factory.CreateConnectionAsync().Result;
         _channel = _connection.CreateChannelAsync().Result;
@@ -38,7 +38,7 @@ public class RabbitMqListener : BackgroundService
             return Task.CompletedTask;
         };
 
-        await _channel.BasicConsumeAsync(_options.Value.CatalogUpdatesQueue, false, consumer);
+        await _channel.BasicConsumeAsync(_options.Value.Url, false, consumer);
 
         return;
     }

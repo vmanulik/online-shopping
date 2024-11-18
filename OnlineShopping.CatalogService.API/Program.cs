@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using OnlineShopping.CatalogService.API.BackgroundServices;
 using OnlineShopping.CatalogService.Application;
+using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
-using System.Text.Encodings.Web;
-using System.Text.Json;
+using OnlineShopping.CatalogService.Infrastructure.Messaging;
+using OnlineShopping.Shared.Infrastructure.Persistence.Options;
 using System.Text.Json.Serialization;
 
 namespace OnlineShopping.CatalogService.API
@@ -15,7 +18,6 @@ namespace OnlineShopping.CatalogService.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
             builder.Services.AddControllers(options =>
             {
                 options.CacheProfiles.Add("Category",
@@ -54,6 +56,12 @@ namespace OnlineShopping.CatalogService.API
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
+
+            builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+            builder.Services.AddSingleton<IntegrationEventSenderService>();
+            builder.Services.AddHostedService<IntegrationEventSenderService>(provider => provider.GetService<IntegrationEventSenderService>());
+
+            builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(nameof(RabbitMqOptions)));
 
             var app = builder.Build();
 

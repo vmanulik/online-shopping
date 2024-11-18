@@ -4,6 +4,7 @@ using OnlineShopping.CartService.Domain.Events;
 using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.Shared.Domain.Entities;
 using Shared.Domain.Exceptions;
+using System.Data;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -41,28 +42,35 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             throw new NotFoundException($"Category ID {request.CategoryId} was not found in the {nameof(Category)}");
         }
 
-        using (_unitOfWork.BeginTransactionAsync())
+        using (var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken))
         {
-            product.Update(request.Name, request.ImageUrl, request.ImageDescription, request.Price, request.CategoryId);
-            
-            JsonSerializerOptions options = new()
-            {
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            };
-            var message = new IntegrationEvent()
-            {
-                Name = Events.ProductUpdate,
-                Data = JsonSerializer.Serialize(
-                            product, 
-                            options: new() {
-                                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                            }
-                        )
-            };
-            _unitOfWork.Events.AddWithoutSave(message);
+            try
+            { 
+                product.Update(request.Name, request.ImageUrl, request.ImageDescription, request.Price, request.CategoryId);
 
-            await _unitOfWork.SaveChangesAsync();
-            await _unitOfWork.CommitTransactionAsync();
+                JsonSerializerOptions options = new()
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                };
+                var message = new IntegrationEvent()
+                {
+                    Name = Events.ProductUpdate,
+                    Data = JsonSerializer.Serialize(
+                                product,
+                                options: new()
+                                {
+                                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                                }
+                            )
+                };
+                await _unitOfWork.Events.AddAsync(message);
+
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+            }
         }
     }
 }
