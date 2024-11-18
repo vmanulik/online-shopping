@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
+using OnlineShopping.CatalogService.Infrastructure.Messaging;
 
 namespace OnlineShopping.CatalogService.Infrastructure;
 
@@ -18,7 +20,8 @@ public static class ConfigureServices
                 }
             ));
 
-        services.AddScoped<CatalogServiceDbContextInitializer>(); 
+        services.AddScoped<CatalogServiceDbContextInitializer>();
+        services.AddScoped<IRabbitMqService, RabbitMqService>();
 
         return services;
     }
