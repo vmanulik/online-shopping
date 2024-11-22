@@ -13,16 +13,9 @@ public class Item : BaseEntity
     public string? ImageDescription { get; set; }
     public decimal Price { get; set; }
     public int Quantity { get; set; }
+    public int CategoryId { get; set; }
 
     public Item() { }
-
-    public Item(int id, string name, decimal price)
-    {
-        Id = id;
-        Name = name;
-        Price = price;
-        Quantity = 1;
-    }
 
     public void SetQuantity(int quantity) => Quantity = quantity;
 
@@ -30,12 +23,13 @@ public class Item : BaseEntity
 
     public void IncrementQuantity() => Quantity++;
 
-    public void Change(string name, string? imageUrl, string? imageDescription, decimal price)
+    public void Change(string name, string? imageUrl, string? imageDescription, decimal price, int categoryId)
     {
         Name = name;
         Price = price;
         ImageUrl = imageUrl;
         ImageDescription = imageDescription;
         Price = price;
+        CategoryId = categoryId;
     }
 }

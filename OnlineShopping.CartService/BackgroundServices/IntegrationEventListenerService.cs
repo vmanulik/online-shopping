@@ -1,5 +1,4 @@
-﻿using LiteDB.Queryable;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CartService.Infrastructure;
@@ -70,7 +69,7 @@ public class IntegrationEventListenerService : BackgroundService
             var item = cart.Items.SingleOrDefault(x => x.Id == product.Id);
             if(item != null)
             {
-                item.Change(product.Name, product.ImageUrl, product.ImageDescription, product.Price);
+                item.Change(product.Name, product.ImageUrl, product.ImageDescription, product.Price, product.CategoryId);
                 await _cartRepository.UpdateAsync(cart);
             }
         }

@@ -8,4 +8,5 @@ public record ItemDTO
     public string? ImageDescription { get; init; }
     public decimal Price { get; init; }
     public int Quantity { get; set; }
+    public int CategoryId { get; set; }
 }
