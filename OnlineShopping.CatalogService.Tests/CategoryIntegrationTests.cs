@@ -11,13 +11,13 @@ namespace OnlineShopping.CatalogService.Tests
     {
         private CustomWebApplicationFactory<Program> _factory;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             _factory = new CustomWebApplicationFactory<Program>();
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             _factory.Dispose();
