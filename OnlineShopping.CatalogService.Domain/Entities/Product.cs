@@ -1,4 +1,5 @@
-﻿using OnlineShopping.Shared.Domain.Entities;
+﻿using OnlineShopping.CartService.Domain.Events;
+using OnlineShopping.Shared.Domain.Entities;
 
 namespace OnlineShopping.CartService.Domain.Entities;
 
@@ -42,5 +43,7 @@ public class Product : BaseAuditableEntity
 
         LastModified = DateTime.Now;
         Version++;
+
+        this.AddDomainEvent(new ProductUpdatedEvent(this));
     }
 }

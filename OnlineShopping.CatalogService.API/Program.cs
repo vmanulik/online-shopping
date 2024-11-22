@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using OnlineShopping.CatalogService.API.BackgroundServices;
 using OnlineShopping.CatalogService.Application;

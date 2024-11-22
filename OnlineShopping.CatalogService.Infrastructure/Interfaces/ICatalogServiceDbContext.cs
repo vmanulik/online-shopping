@@ -13,5 +13,5 @@ public interface ICatalogServiceDbContext : IDisposable
     DbSet<Product> Products { get; }
     DbSet<IntegrationEvent> Events { get; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

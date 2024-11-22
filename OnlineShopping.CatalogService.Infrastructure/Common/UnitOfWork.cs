@@ -1,34 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Infrastracture.Interfaces;
-using OnlineShopping.Shared.Domain.Entities;
-using OnlineShopping.Shared.Infrastructure.Abstraction;
+using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using System.Data;
 
-namespace OnlineShopping.CatalogService.Infrastructure.UnitOfWork;
+namespace OnlineShopping.CatalogService.Infrastructure.Common;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    private readonly ICatalogServiceDbContext _context;
+    private readonly CatalogServiceDbContext _context;
 
-    public UnitOfWork(
-        ICatalogServiceDbContext context,
-        ISharedRepository<Category> categoryRepository,
-        ISharedRepository<Product> productsRepository,
-        ISharedRepository<IntegrationEvent> integrationEventsRepository)
+    public UnitOfWork(CatalogServiceDbContext context)
     {
         _context = context;
-        Categories = categoryRepository;
-        Products = productsRepository;
-        Events = integrationEventsRepository;
     }
-
-    public ISharedRepository<Category> Categories { get; }
-
-    public ISharedRepository<Product> Products { get; }
-
-    public ISharedRepository<IntegrationEvent> Events { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellation = default)
     {
@@ -46,14 +31,14 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     protected void Dispose(bool disposing)
     {
-        if (!this._disposed)
+        if (!_disposed)
         {
             if (disposing)
             {
                 _context.Dispose();
             }
         }
-        this._disposed = true;
+        _disposed = true;
     }
 
     public void Dispose()
