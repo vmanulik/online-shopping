@@ -26,4 +26,3 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasForeignKey(e => e.CategoryId);
     }
 }
-
