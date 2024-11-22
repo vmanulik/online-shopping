@@ -42,6 +42,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             throw new NotFoundException($"Category ID {request.CategoryId} was not found in the {nameof(Category)}");
         }
 
+        // SQLite has only 2 type of transactions: serialazable and readuncommited,
+        // so here the latter one used to avoid blocks. Dirty reads should not be a problem in this cases
         using (var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken))
         {
             try
