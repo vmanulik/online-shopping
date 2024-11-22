@@ -36,7 +36,7 @@ public class IntegrationEventSenderService : BackgroundService
 
                 foreach (var message in events)
                 {
-                    rabbitMqService.SendMessageAsync(message);
+                    rabbitMqService.SendMessageAsync(message, cancellation);
 
                     await eventsRepository.RemoveAsync(message, cancellation);
                 }

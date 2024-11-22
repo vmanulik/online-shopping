@@ -4,5 +4,5 @@ namespace OnlineShopping.CatalogService.Infrastracture.Interfaces;
 
 public interface IRabbitMqService
 {
-    void SendMessageAsync(IntegrationEvent message);
+    void SendMessageAsync(IntegrationEvent message, CancellationToken cancellation);
 }

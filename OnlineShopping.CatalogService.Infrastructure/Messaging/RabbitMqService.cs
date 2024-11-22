@@ -16,8 +16,10 @@ public class RabbitMqService : IRabbitMqService
         _options = options;
     }
 
-    public async void SendMessageAsync(IntegrationEvent message)
+    public async void SendMessageAsync(IntegrationEvent message, CancellationToken cancellation)
     {
+        cancellation.ThrowIfCancellationRequested();
+
         var factory = new ConnectionFactory()
         {
             HostName = _options.Value.Url,
