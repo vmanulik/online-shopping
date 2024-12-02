@@ -2,7 +2,6 @@
 using OnlineShopping.CartService.API.Commands;
 using OnlineShopping.CartService.API.Queries;
 using OnlineShopping.CartService.Application.DTOs;
-using OnlineShopping.CatalogService.API;
 
 namespace OnlineShopping.CartService.API
 {

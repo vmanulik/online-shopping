@@ -33,6 +33,11 @@ namespace OnlineShopping.CartService
 
             app.MapControllers();
 
+            app.MapControllerRoute(
+                name: "login-callback",
+                pattern: "/login-callback",
+                defaults: new { controller = "Account", action = "LoginCallback" });
+
             app.Run();
         }
 
