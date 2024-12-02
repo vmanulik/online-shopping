@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OnlineShopping.CatalogService.API.BackgroundServices;
@@ -63,6 +64,10 @@ namespace OnlineShopping.CatalogService.API
             builder.Services.AddHostedService<IntegrationEventSenderService>();
 
             builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(nameof(RabbitMqOptions)));
+            builder.Services.Configure<KeycloakOptions>(builder.Configuration.GetSection(nameof(KeycloakOptions)));
+
+            var keycloakOptions = builder.Configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
+            AddKeycloakAuthentication(builder.Services, keycloakOptions!);
 
             var app = builder.Build();
 
@@ -84,6 +89,7 @@ namespace OnlineShopping.CatalogService.API
             }
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseHttpsRedirection();
             app.UseResponseCaching(); 
@@ -91,6 +97,36 @@ namespace OnlineShopping.CatalogService.API
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static void AddKeycloakAuthentication(IServiceCollection services, KeycloakOptions settings)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            })
+            .AddOpenIdConnect(options =>
+            {
+                options.Authority = settings.Url;
+                options.ClientId = settings.ClientId;
+                options.ClientSecret = settings.ClientSecret;
+                options.ResponseType = "code";
+                options.SaveTokens = true;
+                options.Scope.Add("openid");
+                options.RequireHttpsMetadata = false;
+                options.CallbackPath = "/login-callback"; // Update callback path
+                options.SignedOutCallbackPath = "/logout-callback"; // Update signout callback path
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "preferred_username",
+                    RoleClaimType = "roles"
+                };
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CatalogService.Application.Categories.Commands;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Categories.Queries;
@@ -36,6 +37,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "manager")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
         {
@@ -45,6 +47,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "manager")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateCategory([FromRoute] int id, [FromBody] UpdateCategoryCommand command)
@@ -60,6 +63,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "manager")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteCategory([FromRoute] int id)
         {
