@@ -19,9 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CatalogServi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnlineShopping.CartService", "OnlineShopping.CartService", "{F430535C-2CFA-45FC-90A1-D3C59573992A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopping.CartService.Tests", "OnlineShopping.CartService.Tests\OnlineShopping.CartService.Tests.csproj", "{E664E8C9-FDD0-481B-931A-B7898E35258B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CartService.Tests", "OnlineShopping.CartService.Tests\OnlineShopping.CartService.Tests.csproj", "{E664E8C9-FDD0-481B-931A-B7898E35258B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopping.CatalogService.Tests", "OnlineShopping.CatalogService.Tests\OnlineShopping.CatalogService.Tests.csproj", "{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CatalogService.Tests", "OnlineShopping.CatalogService.Tests\OnlineShopping.CatalogService.Tests.csproj", "{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,10 @@ Global
 		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
