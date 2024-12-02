@@ -79,6 +79,7 @@ namespace OnlineShopping.CatalogService.API
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
+            builder.Services.AddSingleton<IAuthenticationTokenExchange, AuthenticationTokenExchange>();
             builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
             builder.Services.AddHostedService<IntegrationEventSenderService>();
 
