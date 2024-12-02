@@ -25,8 +25,8 @@ public class RabbitMqService : IRabbitMqService
             HostName = _options.Value.Url,
             VirtualHost = _options.Value.VirtualHost,
             Port = _options.Value.Port,
-            UserName = _options.Value.UserName,
-            Password = _options.Value.Password
+            UserName = _options.Value.ClientId,
+            Password = _options.Value.ClientSecret
         };
 
         using (var connection = await factory.CreateConnectionAsync())

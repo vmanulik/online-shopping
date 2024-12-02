@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OnlineShopping.CatalogService.API.BackgroundServices;
 using OnlineShopping.CatalogService.Application;
@@ -80,9 +83,9 @@ namespace OnlineShopping.CatalogService.API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
 
-            app.UseAuthorization();
+            app.UseHttpsRedirection();
             app.UseResponseCaching(); 
 
             app.MapControllers();

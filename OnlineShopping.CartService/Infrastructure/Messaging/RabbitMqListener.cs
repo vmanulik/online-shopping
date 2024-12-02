@@ -2,7 +2,6 @@
 using OnlineShopping.Shared.Infrastructure.Persistence.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Text;
 
 namespace OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 
@@ -30,8 +29,8 @@ public class RabbitMqListener : IRabbitMqListener, IDisposable
             HostName = _options.Value.Url,
             VirtualHost = _options.Value.VirtualHost,
             Port = _options.Value.Port,
-            UserName = _options.Value.UserName,
-            Password = _options.Value.Password
+            UserName = _options.Value.ClientId,
+            Password = _options.Value.ClientSecret
         };
 
         _connection = factory.CreateConnectionAsync().Result;
