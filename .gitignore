@@ -16,6 +16,9 @@
 # Mono auto generated files
 mono_crash.*
 
+# Postgres volume
+database
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
