@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShopping.CartService.Application.Common.Configurations;
 using OnlineShopping.CartService.BackgroundServices;
@@ -82,31 +84,34 @@ namespace OnlineShopping.CartService
 
         private static void AddKeycloakAuthentication(IServiceCollection services, KeycloakOptions settings)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
-            })
-            .AddOpenIdConnect(options =>
+            .AddJwtBearer(options =>
             {
                 options.Authority = settings.Url;
-                options.ClientId = settings.ClientId;
-                options.ClientSecret = settings.ClientSecret;
-                options.ResponseType = "code";
-                options.SaveTokens = true;
-                options.Scope.Add("openid");
+                options.SaveToken = false;
                 options.RequireHttpsMetadata = false;
-                options.CallbackPath = "/login-callback"; // Update callback path
-                options.SignedOutCallbackPath = "/logout-callback"; // Update signout callback path
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    NameClaimType = "preferred_username",
-                    RoleClaimType = "roles"
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "http://{keycloakHost}:{keycloakPort}/realms/{yourRealm}"
                 };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CartReadAccess", policy => policy.RequireClaim("permission", "cart:read"));
+                options.AddPolicy("CartWriteAccess", policy => policy.RequireClaim("permission", "cart:write"));
             });
         }
     }

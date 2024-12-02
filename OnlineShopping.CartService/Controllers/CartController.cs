@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopping.CartService.API.Commands;
 using OnlineShopping.CartService.API.Queries;
 using OnlineShopping.CartService.Application.DTOs;
@@ -19,6 +20,7 @@ namespace OnlineShopping.CartService.API
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "CartReadAccess")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CartDTO>> GetCartInfo([FromRoute] Guid id)
         {
@@ -28,6 +30,7 @@ namespace OnlineShopping.CartService.API
         }
 
         [HttpPut("{id}/items/add")]
+        [Authorize(Policy = "CartWriteAccess")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> AddItemToCart([FromRoute] Guid id, [FromBody] AddItemToCartCommand command)
         {
@@ -37,6 +40,7 @@ namespace OnlineShopping.CartService.API
         }
 
         [HttpPut("{id}/items/{itemId}/remove")]
+        [Authorize(Policy = "CartWriteAccess")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveItemFromCart([FromRoute] Guid id, [FromRoute] int itemId)
         {
@@ -47,6 +51,7 @@ namespace OnlineShopping.CartService.API
 
         [ApiVersion("2.0")]
         [HttpGet("{id}")]
+        [Authorize(Policy = "CartReadAccess")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<ItemDTO>>> GetCartItems([FromRoute] Guid id)
         {

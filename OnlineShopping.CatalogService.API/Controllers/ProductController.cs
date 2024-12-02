@@ -18,6 +18,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpGet(Name = nameof(GetProducts))]
+        [Authorize(Policy = "CatalogReadAccess")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<ProductDTO>>> GetProducts([FromQuery] SieveInputModel sieveInput, [FromQuery] PaginationModel pagination)
         {
@@ -27,6 +28,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpGet("{id}", Name = nameof(GetProduct))]
+        [Authorize(Policy = "CatalogReadAccess")]
         [ResponseCache(CacheProfileName = "Product")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<ProductDTO>> GetProduct([FromRoute] int id)
@@ -37,7 +39,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpPost(Name = nameof(CreateProduct))]
-        [Authorize(Roles = "manager")]
+        [Authorize(Policy = "CatalogWriteAccess")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateProduct([FromBody] CreateProductCommand command)
         {
@@ -47,7 +49,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpPut("{id}", Name = nameof(UpdateProduct))]
-        [Authorize(Roles = "manager")]
+        [Authorize(Policy = "CatalogWriteAccess")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateProduct([FromRoute] int id, [FromBody] UpdateProductCommand command)
@@ -63,7 +65,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpDelete("{id}", Name = nameof(DeleteProduct))]
-        [Authorize(Roles = "manager")]
+        [Authorize(Policy = "CatalogWriteAccess")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {

@@ -18,6 +18,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CatalogReadAccess")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<CategoryDTO>>> GetCategories([FromQuery] SieveInputModel sieveInput, [FromQuery] PaginationModel pagination)
         {
@@ -27,6 +28,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "CatalogReadAccess")]
         [ResponseCache(CacheProfileName = "Category")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CategoryDTO>> GetCategory([FromRoute] int id)
@@ -37,7 +39,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "manager")]
+        [Authorize(Policy = "CatalogWriteAccess")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
         {
@@ -47,7 +49,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "manager")]
+        [Authorize(Policy = "CatalogWriteAccess")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateCategory([FromRoute] int id, [FromBody] UpdateCategoryCommand command)
@@ -63,7 +65,7 @@ namespace OnlineShopping.CatalogService.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "manager")]
+        [Authorize(Policy = "CatalogWriteAccess")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteCategory([FromRoute] int id)
         {
