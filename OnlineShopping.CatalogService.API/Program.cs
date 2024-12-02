@@ -49,6 +49,26 @@ namespace OnlineShopping.CatalogService.API
                         Url = new Uri("https://opensource.org/license/mit")
                     }
                 });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please provide JWT with bearer (Bearer {jwt token})",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                    },
+                    new List<string>() }
+                });
             });
 
             builder.Services.AddCatalogInfrastructureServices(builder.Configuration);
