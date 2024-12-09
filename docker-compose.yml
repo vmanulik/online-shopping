@@ -24,7 +24,7 @@ services:
     image: sonarqube:lts-community
     depends_on:
       - sonar_db
-      # - fixsysctl 
+      - fixsysctl 
     environment:
       SONAR_JDBC_URL: jdbc:postgresql://sonar_db/sonar
       SONAR_JDBC_USERNAME: sonar
@@ -42,7 +42,7 @@ services:
     volumes:
         - ./volumes/sonar_db:/var/lib/postgresql
         - ./volumes/sonar_db_data:/var/lib/postgresql/data
-  # fixsysctl:
-  #   privileged: true
-  #   image: busybox:1.28
-  #   command: "sysctl -w vm.max_map_count=262144"
+  fixsysctl:
+    privileged: true
+    image: busybox:1.28
+    command: "sysctl -w vm.max_map_count=262144"
