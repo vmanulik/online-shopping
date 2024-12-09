@@ -9,7 +9,7 @@ namespace OnlineShopping.CatalogService.Infrastructure.Messaging;
 
 public class RabbitMqService : IRabbitMqService
 {
-    private IOptions<RabbitMqOptions> _options;
+    private readonly IOptions<RabbitMqOptions> _options;
 
     public RabbitMqService(IOptions<RabbitMqOptions> options)
     {
@@ -29,17 +29,24 @@ public class RabbitMqService : IRabbitMqService
             Password = _options.Value.ClientSecret
         };
 
-        using (var connection = await factory.CreateConnectionAsync())
-        using (var channel = await connection.CreateChannelAsync())
+        using (var connection = await factory.CreateConnectionAsync(cancellation))
+        using (var channel = await connection.CreateChannelAsync(cancellationToken: cancellation))
         {
-            await channel.QueueDeclareAsync(queue: message.Name, durable: true, exclusive: false, autoDelete: false, arguments: null);
+            await channel.QueueDeclareAsync(
+                queue: message.Name,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null,
+                cancellationToken: cancellation);
 
             var body = Encoding.UTF8.GetBytes(message.Data);
 
             await channel.BasicPublishAsync(exchange: string.Empty,
                            routingKey: message.Name,
                            mandatory: true,
-                           body: body);
+                           body: body,
+                           cancellation);
         }
     }
 }

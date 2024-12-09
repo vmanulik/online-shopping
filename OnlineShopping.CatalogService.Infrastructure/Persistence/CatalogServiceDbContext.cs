@@ -21,19 +21,17 @@ public class CatalogServiceDbContext : DbContext, ICatalogServiceDbContext
         _mediator = mediator;
     }
 
-    public override DatabaseFacade Database => base.Database;
-
     public DbSet<Category> Categories => Set<Category>();
 
     public DbSet<Product> Products => Set<Product>();
 
     public DbSet<IntegrationEvent> Events => Set<IntegrationEvent>();
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

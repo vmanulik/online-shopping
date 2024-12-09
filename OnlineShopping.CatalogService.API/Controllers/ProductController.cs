@@ -9,14 +9,6 @@ namespace OnlineShopping.CatalogService.API.Controllers
 {
     public class ProductController : CatalogControllerBase
     {
-        private readonly ILogger<ProductController> _logger;
-
-        public ProductController(
-            ILogger<ProductController> logger)
-        {
-            _logger = logger;
-        }
-
         [HttpGet(Name = nameof(GetProducts))]
         [Authorize(Policy = "CatalogReadAccess")]
         [ProducesResponseType(StatusCodes.Status200OK)]

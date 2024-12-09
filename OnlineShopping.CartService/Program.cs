@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShopping.CartService.Application.Common.Configurations;
@@ -12,11 +11,10 @@ using OnlineShopping.CartService.Infrastructure.Persistence;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Repositories;
 using OnlineShopping.Shared.Infrastructure.Persistence.Options;
-using System.Reflection;
 
 namespace OnlineShopping.CartService
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {

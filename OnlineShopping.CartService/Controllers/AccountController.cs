@@ -6,14 +6,6 @@ namespace OnlineShopping.CartService.API.Controllers
 {
     public class AccountController : CartControllerBase
     {
-        private readonly ILogger<AccountController> _logger;
-
-        public AccountController(
-            ILogger<AccountController> logger)
-        {
-            _logger = logger;
-        }
-
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> LoginCallback()

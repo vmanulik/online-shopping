@@ -3,7 +3,6 @@ using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.Shared.Infrastructure.Abstraction;
 using Shared.Domain.Exceptions;
-using System.Data;
 
 namespace OnlineShopping.CatalogService.Application.Products.Commands;
 
@@ -47,6 +46,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 
         product.Update(request.Name, request.ImageUrl, request.ImageDescription, request.Price, request.CategoryId);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

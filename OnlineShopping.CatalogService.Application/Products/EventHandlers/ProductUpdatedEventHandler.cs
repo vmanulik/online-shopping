@@ -31,6 +31,6 @@ public class ProductUpdatedEventHandler : INotificationHandler<ProductUpdatedEve
                             )
         };
 
-        _eventRepository.AddWithoutSave(message);
+        _eventRepository.AddWithoutSave(message, cancellationToken);
     }
 }

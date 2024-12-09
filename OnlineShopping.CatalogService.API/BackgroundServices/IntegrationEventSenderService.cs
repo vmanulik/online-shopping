@@ -19,7 +19,7 @@ public class IntegrationEventSenderService : BackgroundService
             dbContext.Database.EnsureCreated();   
     }
 
-    protected override async Task ExecuteAsync(CancellationToken cancellation)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var options = _scope.ServiceProvider.GetRequiredService<IOptions<RabbitMqOptions>>().Value;
         var rabbitMqService = _scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
@@ -27,27 +27,27 @@ public class IntegrationEventSenderService : BackgroundService
 
         try
         {
-            while (!cancellation.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var events = await eventsRepository
                     .GetAllAsQueryable()
                     .OrderBy(o => o.Id)
-                    .ToListAsync(cancellation);
+                    .ToListAsync(cancellationToken);
 
                 foreach (var message in events)
                 {
-                    rabbitMqService.SendMessageAsync(message, cancellation);
+                    rabbitMqService.SendMessageAsync(message, cancellationToken);
 
-                    await eventsRepository.RemoveAsync(message, cancellation);
+                    await eventsRepository.RemoveAsync(message, cancellationToken);
                 }
 
-                await Task.Delay(options.EventFetchPeriod, cancellation);
+                await Task.Delay(options.EventFetchPeriod, cancellationToken);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
-            await Task.Delay(5 * options.EventFetchPeriod, cancellation);
+            await Task.Delay(5 * options.EventFetchPeriod, cancellationToken);
         }
     }
 }

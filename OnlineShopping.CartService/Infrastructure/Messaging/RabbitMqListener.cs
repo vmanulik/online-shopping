@@ -12,7 +12,7 @@ public class RabbitMqListener : IRabbitMqListener, IDisposable
 
     private AsyncEventingBasicConsumer _consumer;
 
-    private IOptions<RabbitMqOptions> _options;
+    private readonly IOptions<RabbitMqOptions> _options;
 
     public event AsyncEventHandler<BasicDeliverEventArgs> ReceivedAsync
     {
