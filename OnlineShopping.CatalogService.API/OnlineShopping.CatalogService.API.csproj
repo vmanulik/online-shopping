@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+	<RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,5 +23,9 @@
     <ProjectReference Include="..\OnlineShopping.CatalogService.Application\OnlineShopping.CatalogService.Application.csproj" />
     <ProjectReference Include="..\OnlineShopping.CatalogService.Infrastructure\OnlineShopping.CatalogService.Infrastructure.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(SolutionDir)Configuration\pre-commit&quot; &quot;$(SolutionDir)\.git\hooks&quot;" />
+  </Target>
 
 </Project>

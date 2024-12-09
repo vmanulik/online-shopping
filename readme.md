@@ -27,3 +27,8 @@ cart:write - associated with manager-policy, customer-policy on cart scope
 catalog:read - associated with manager-policy, customer-policy on catalog scope
 
 catalog:write - associated with manager-policy on catalog scope
+
+#miscellaneous
+
+git pre-push validation using dotnet-format tool to check for consistent styling and rules
+implemented using local pre-commit hook being copied to .git/hooks via post-build event
