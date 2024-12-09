@@ -31,7 +31,7 @@ public class AuthenticationTokenExchange : IAuthenticationTokenExchange
 
             AuthorizationToken? token = JsonSerializer.Deserialize<AuthorizationToken>(jsonContent);
 
-            return token.AccessToken;
+            return token?.AccessToken;
         }
         catch (Exception ex)
         {
@@ -57,7 +57,7 @@ public class AuthenticationTokenExchange : IAuthenticationTokenExchange
 
             AuthorizationToken? token = JsonSerializer.Deserialize<AuthorizationToken>(jsonContent);
 
-            return token.AccessToken;
+            return token?.AccessToken;
         }
         catch (Exception ex)
         {

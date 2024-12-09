@@ -5,14 +5,14 @@ namespace OnlineShopping.CatalogService.Application;
 public class AuthorizationToken
 {
     [JsonPropertyName("access_token")]
-    public string AccessToken { get; set; }
+    public required string AccessToken { get; set; }
 
     [JsonPropertyName("token_type")]
-    public string TokenType { get; set; }
+    public required string TokenType { get; set; }
 
     [JsonPropertyName("expires_in")]
-    public int ExpiresIn { get; set; }
+    public required int ExpiresIn { get; set; }
 
     [JsonPropertyName("refresh_token")]
-    public string RefreshToken { get; set; }
+    public required string RefreshToken { get; set; }
 }

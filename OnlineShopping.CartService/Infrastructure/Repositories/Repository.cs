@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using LiteDB.Queryable;
+﻿using LiteDB.Queryable;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
 
 using System.Linq.Expressions;
@@ -17,10 +16,10 @@ public class Repository<T> : ILiteDbRepository<T> where T : new()
 
     public async Task<List<T>> GetAllAsync()
     {
-        return _dbContext.Database
+        return await _dbContext.Database
             .GetCollection<T>(nameof(T))
             .AsQueryable()
-            .ToList();
+            .ToListAsync(default);
     }  
 
     public IQueryable<T> GetAllAsQueryable()

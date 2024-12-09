@@ -24,11 +24,11 @@ namespace OnlineShopping.CartService.API.Controllers
                 return RedirectToAction("Login");
             }
 
-            var accessToken = authResult.Properties.GetTokenValue("access_token");
-            var refreshToken = authResult.Properties.GetTokenValue("refresh_token");
+            var accessToken = authResult!.Properties!.GetTokenValue("access_token");
+            var refreshToken = authResult!.Properties!.GetTokenValue("refresh_token");
 
-            HttpContext.Session.SetString("access_token", accessToken);
-            HttpContext.Session.SetString("refresh_token", refreshToken);
+            HttpContext.Session.SetString("access_token", accessToken!);
+            HttpContext.Session.SetString("refresh_token", refreshToken!);
 
             return RedirectToAction("GetCategories", "Category");
         }

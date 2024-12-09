@@ -11,7 +11,7 @@ public class Category : BaseEntity
     public string? ImageUrl { get; private set; }
 
     public int? ParentCategoryId { get; private set; }
-    public Category ParentCategory { get; private set; }
+    public Category? ParentCategory { get; private set; }
 
     public IReadOnlyCollection<Product> Products => _products;
     public IReadOnlyCollection<Category> SubCategories => _subCategories;
