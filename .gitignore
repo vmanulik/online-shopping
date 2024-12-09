@@ -16,8 +16,8 @@
 # Mono auto generated files
 mono_crash.*
 
-# Postgres volume
-database
+# Docker volumes
+volumes
 
 # Build results
 [Dd]ebug/

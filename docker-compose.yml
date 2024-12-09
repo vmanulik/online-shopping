@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:latest
     volumes:
-        - ./database:/var/lib/postgresql/data
+        - ./volumes/keycloak_d:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
