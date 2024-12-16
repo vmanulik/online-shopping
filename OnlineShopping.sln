@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CartService.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopping.CatalogService.Tests", "OnlineShopping.CatalogService.Tests\OnlineShopping.CatalogService.Tests.csproj", "{58C6A13C-0DD5-4595-AF6B-4A2A5D759710}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Configuration\Docker\docker-compose.dcproj", "{AE020DFF-8CEC-4DEB-BDD2-D972CC952AEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

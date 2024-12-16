@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)Configuration\pre-commit&quot; &quot;$(SolutionDir)\.git\hooks&quot;&#xD;&#xA;git config --local core.hooksPath &quot;.git\hooks&quot;" />
+    <Exec Command="copy &quot;$(SolutionDir)Configuration\Git-hooks\pre-commit&quot; &quot;$(SolutionDir)\.git\hooks&quot;&#xD;&#xA;git config --local core.hooksPath &quot;.git\hooks&quot;" />
   </Target>
 
 </Project>
