@@ -8,5 +8,4 @@ services: #TODO Was not able to add not default user
     volumes:
       - ../volumes/rabbitmq/data/:/var/lib/rabbitmq/
       - ../volumes/rabbitmq/log/:/var/log/rabbitmq/
-volumes:
-  rabbitmq_data:
+    restart: always
