@@ -10,5 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
+    <None Include="rabbitmq.yml" />
   </ItemGroup>
 </Project>
