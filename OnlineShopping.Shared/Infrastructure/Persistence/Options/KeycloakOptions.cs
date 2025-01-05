@@ -2,4 +2,5 @@
 
 public class KeycloakOptions : ApiCredentialsOptions
 {
+    public string LoginCallback { get; init; }
 }
