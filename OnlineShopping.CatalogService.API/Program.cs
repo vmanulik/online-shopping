@@ -1,13 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -50,7 +45,6 @@ namespace OnlineShopping.CatalogService.API
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog Service API");
                     options.OAuthClientId(keycloakOptions!.ClientId);
                     options.OAuthClientSecret(keycloakOptions!.ClientSecret);
-                    //options.OAuth2RedirectUrl(keycloakOptions!.LoginCallback);
                 });
             }
 
@@ -199,11 +193,7 @@ namespace OnlineShopping.CatalogService.API
                 };
             });
 
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("CatalogReadAccess", policy => policy.RequireClaim("permission", "catalog:read"));
-                //options.AddPolicy("CatalogWriteAccess", policy => policy.RequireClaim("permission", "catalog:write"));
-            });
+            services.AddAuthorization();
         }
     }
 }

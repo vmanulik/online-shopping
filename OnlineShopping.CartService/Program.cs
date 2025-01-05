@@ -170,11 +170,7 @@ namespace OnlineShopping.CartService
                 };
             });
 
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("CartReadAccess", policy => policy.RequireClaim("permission", "cart:read"));
-                //options.AddPolicy("CartWriteAccess", policy => policy.RequireClaim("permission", "cart:write"));
-            });
+            services.AddAuthorization();
         }
     }
 }
