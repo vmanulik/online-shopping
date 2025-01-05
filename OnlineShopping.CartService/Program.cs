@@ -35,7 +35,7 @@ namespace OnlineShopping.CartService
 
             app.UseCors("AllowAllPolicy");
             app.UseHttpsRedirection();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -67,7 +67,7 @@ namespace OnlineShopping.CartService
             );
             builder.Services.Configure<RabbitMqOptions>(
                 builder.Configuration.GetSection(nameof(RabbitMqOptions))
-            ); 
+            );
             builder.Services.Configure<KeycloakOptions>(
                 builder.Configuration.GetSection(nameof(KeycloakOptions))
             );
@@ -167,6 +167,24 @@ namespace OnlineShopping.CartService
                     RoleClaimType = ClaimTypes.Role,
                     ValidateIssuer = true,
                     ValidateLifetime = true
+                };
+
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        string firstName = context.SecurityToken.Claims!.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.GivenName)?.Value;
+                        string lastName = context.SecurityToken.Claims.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.FamilyName)?.Value;
+                        string userEmail =
+                            context.SecurityToken.Claims.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value
+                            ?? context.SecurityToken.Claims.SingleOrDefault(c => c.Type == "preferred_username")?.Value;
+
+                        var logger = new LoggerFactory().CreateLogger<Type>();
+
+                        logger.LogInformation($"{firstName} {lastName} {userEmail}:, {context.SecurityToken.InnerToken}");
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
