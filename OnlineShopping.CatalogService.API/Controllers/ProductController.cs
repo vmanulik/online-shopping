@@ -10,7 +10,8 @@ namespace OnlineShopping.CatalogService.API.Controllers
     public class ProductController : CatalogControllerBase
     {
         [HttpGet(Name = nameof(GetProducts))]
-        [Authorize(Policy = "CatalogReadAccess")]
+        [Authorize]
+        //[Authorize(Policy = "CatalogReadAccess")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<ProductDTO>>> GetProducts([FromQuery] SieveInputModel sieveInput, [FromQuery] PaginationModel pagination)
         {

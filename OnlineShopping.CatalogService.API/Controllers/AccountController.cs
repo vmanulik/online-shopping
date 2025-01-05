@@ -1,18 +1,29 @@
-﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineShopping.CatalogService.API.Controllers
 {
     public class AccountController : CatalogControllerBase
     {
-        private readonly ILogger<AccountController> _logger;
+        //[HttpGet]
+        //[ApiExplorerSettings(IgnoreApi = true)]
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+        //public IActionResult AccessDenied()
+        //{
+        //    return StatusCode((int)HttpStatusCode.Forbidden);
+        //}
 
-        public AccountController(
-            ILogger<AccountController> logger)
-        {
-            _logger = logger;
-        }
+        //[HttpGet("logout")]
+        //public async Task UnAuthorize()
+        //{
+        //    if (User.Identity != null && User.Identity.IsAuthenticated)
+        //    {
+        //        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        //        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+        //        return;
+        //    }
+        //}
 
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
