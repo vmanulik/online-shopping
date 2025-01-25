@@ -1,14 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+﻿using System.Reflection;
 using OnlineShopping.CartService.Application.Common.Configurations;
 using OnlineShopping.CartService.BackgroundServices;
 using OnlineShopping.CartService.Configuration;
@@ -17,6 +7,7 @@ using OnlineShopping.CartService.Infrastructure.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Persistence;
 using OnlineShopping.CartService.Infrastructure.Persistence.Interfaces;
 using OnlineShopping.CartService.Infrastructure.Repositories;
+using OnlineShopping.Shared.Auth;
 using OnlineShopping.Shared.Infrastructure.Persistence.Options;
 
 namespace OnlineShopping.CartService
@@ -33,11 +24,16 @@ namespace OnlineShopping.CartService
 
             app.UseSwaggerDocumentation(builder.Configuration);
 
-            app.UseCors("AllowAllPolicy");
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors(policy => policy
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
 
             app.MapControllers();
 
@@ -78,35 +74,7 @@ namespace OnlineShopping.CartService
             builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
             builder.Services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri($"{keycloakOptions!.Url}/protocol/openid-connect/auth")
-                        }
-                    }
-                });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Keycloak",
-                                Type = ReferenceType.SecurityScheme,
-                            },
-                            In = ParameterLocation.Header,
-                            Name = "Bearer",
-                            Scheme = "Bearer",
-                        },
-                        Array.Empty<string>()
-                    }
-                });
+                options.AddSwaggerKeycloakSecurity(keycloakOptions!);
             });
 
             builder.Services.AddCors(corsOptions => corsOptions.AddPolicy("AllowAllPolicy", policyBuilder =>
@@ -126,69 +94,6 @@ namespace OnlineShopping.CartService
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             });
-        }
-
-        private static void AddKeycloakAuthentication(this IServiceCollection services, KeycloakOptions keycloackOptions)
-        {
-            IdentityModelEventSource.ShowPII = true;
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddCookie(cookie =>
-            {
-                cookie.Cookie.Name = "keycloak.cookie";
-                cookie.Cookie.MaxAge = TimeSpan.FromMinutes(60);
-                cookie.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                cookie.SlidingExpiration = true;
-            })
-            .AddOpenIdConnect(options =>
-            {
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.Authority = keycloackOptions.Url;
-                options.MetadataAddress = $"{keycloackOptions.Url}/.well-known/openid-configuration";
-                options.ClientId = keycloackOptions.ClientId;
-                options.ClientSecret = keycloackOptions.ClientSecret;
-                options.RequireHttpsMetadata = false;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.SaveTokens = true;
-                options.ResponseType = OpenIdConnectResponseType.Code;
-                options.NonceCookie.SameSite = SameSiteMode.Unspecified;
-                options.CorrelationCookie.SameSite = SameSiteMode.Unspecified;
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = "name",
-                    RoleClaimType = ClaimTypes.Role,
-                    ValidateIssuer = true,
-                    ValidateLifetime = true
-                };
-
-                options.Events = new OpenIdConnectEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        string firstName = context.SecurityToken.Claims!.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.GivenName)?.Value;
-                        string lastName = context.SecurityToken.Claims.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.FamilyName)?.Value;
-                        string userEmail =
-                            context.SecurityToken.Claims.SingleOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value
-                            ?? context.SecurityToken.Claims.SingleOrDefault(c => c.Type == "preferred_username")?.Value;
-
-                        var logger = new LoggerFactory().CreateLogger<Type>();
-
-                        logger.LogInformation($"{firstName} {lastName} {userEmail}:, {context.SecurityToken.InnerToken}");
-
-                        return Task.CompletedTask;
-                    }
-                };
-            });
-
-            services.AddAuthorization();
         }
     }
 }

@@ -1,12 +1,5 @@
-﻿using System.Security.Claims;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OnlineShopping.CatalogService.API.BackgroundServices;
 using OnlineShopping.CatalogService.Application;
@@ -14,6 +7,7 @@ using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.CatalogService.Infrastracture.Persistence;
 using OnlineShopping.CatalogService.Infrastructure;
 using OnlineShopping.CatalogService.Infrastructure.Messaging;
+using OnlineShopping.Shared.Auth;
 using OnlineShopping.Shared.Infrastructure.Persistence.Options;
 
 namespace OnlineShopping.CatalogService.API
@@ -37,28 +31,32 @@ namespace OnlineShopping.CatalogService.API
                 await dbInitializator.InitialiseAsync();
             }
 
-            var keycloakOptions = app.Configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
             if (app.Environment.IsDevelopment())
             {
+                var keycloakOptions = app.Configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
+
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog Service API");
                     options.OAuthClientId(keycloakOptions!.ClientId);
                     options.OAuthClientSecret(keycloakOptions!.ClientSecret);
+                    options.EnableTryItOutByDefault();
+                    //options.EnablePersistAuthorization();
                 });
             }
 
-            app.MapGet("users/me", (ClaimsPrincipal claimsPrincipal) =>
-            {
-                claimsPrincipal.Claims.ToDictionary(c => c.Type, c => c.Value);
-            }).RequireAuthorization();
-
-            app.UseAuthorization();
-            app.UseAuthentication();
-
-            app.UseCors("AllowAllPolicy");
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseCors(policy => policy
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
+
             app.UseResponseCaching();
 
             app.MapControllers();
@@ -100,7 +98,6 @@ namespace OnlineShopping.CatalogService.API
             builder.Services.Configure<KeycloakOptions>(builder.Configuration.GetSection(nameof(KeycloakOptions)));
 
             var keycloakOptions = builder.Configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
-            AddKeycloakAuthentication(builder.Services, keycloakOptions!);
 
             builder.Services.AddSwaggerGen(options =>
             {
@@ -117,116 +114,12 @@ namespace OnlineShopping.CatalogService.API
                     }
                 });
 
-                options.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri($"{keycloakOptions!.Url}/protocol/openid-connect/auth"),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "openid", "openid" },
-                                { "profile", "profile" }
-                            }
-                        }
-                    }
-                });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Keycloak",
-                                Type = ReferenceType.SecurityScheme,
-                            },
-                            In = ParameterLocation.Header,
-                            Name = JwtBearerDefaults.AuthenticationScheme,
-                            Scheme = JwtBearerDefaults.AuthenticationScheme,
-                        },
-                        Array.Empty<string>()
-                    }
-                });
+                options.AddSwaggerKeycloakSecurity(keycloakOptions!);
             });
 
-            //builder.Services.AddCors(corsOptions => corsOptions.AddPolicy("AllowAllPolicy", policyBuilder =>
-            //{
-            //    policyBuilder.SetIsOriginAllowed(_ => true)
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader()
-            //        .AllowCredentials();
-            //}));
-        }
+            builder.Services.AddKeycloakAuthentication(keycloakOptions!);
 
-        private static void AddKeycloakAuthentication(IServiceCollection services, KeycloakOptions keycloackOptions)
-        {
-            IdentityModelEventSource.ShowPII = true;
-
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            //})
-            //.AddCookie(cookie =>
-            //{
-            //    cookie.Cookie.Name = "keycloak.cookie";
-            //    cookie.Cookie.MaxAge = TimeSpan.FromMinutes(60);
-            //    cookie.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-            //    cookie.SlidingExpiration = true;
-            //})
-            //.AddOpenIdConnect(options =>
-            //{
-            //    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    options.Authority = keycloackOptions.Url;
-            //    options.MetadataAddress = $"{keycloackOptions.Url}/.well-known/openid-configuration";
-            //    options.ClientId = keycloackOptions.ClientId;
-            //    options.ClientSecret = keycloackOptions.ClientSecret;
-            //    options.RequireHttpsMetadata = false;
-            //    options.GetClaimsFromUserInfoEndpoint = true;
-            //    options.Scope.Add("openid");
-            //    options.Scope.Add("profile");
-            //    options.SaveTokens = true;
-            //    options.ResponseType = OpenIdConnectResponseType.Code;
-            //    options.NonceCookie.SameSite = SameSiteMode.Unspecified;
-            //    options.CorrelationCookie.SameSite = SameSiteMode.Unspecified;
-            //    //options.CallbackPath = "/account/logincallback";
-
-            //    //options.Events.OnRedirectToIdentityProvider = async context =>
-            //    //{
-            //    //    context.ProtocolMessage.IssuerAddress = $"{keycloackOptions.Url}/protocol/openid-connect/auth";
-            //    //    await Task.FromResult(0);
-            //    //};
-
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        NameClaimType = "name",
-            //        RoleClaimType = ClaimTypes.Role,
-            //        ValidateIssuer = true,
-            //        ValidateLifetime = true
-            //    };
-            //});
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.MetadataAddress = $"{keycloackOptions.Url}/.well-known/openid-configuration";
-                        options.Audience = "account";
-
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidIssuer = keycloackOptions.Url,
-                            ValidateAudience = false
-                        };
-                    }
-                );
-
-            services.AddAuthorization();
+            //builder.Services.AddAuthorization();
         }
     }
 }

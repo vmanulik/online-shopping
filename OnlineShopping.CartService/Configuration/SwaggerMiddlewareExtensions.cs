@@ -24,6 +24,9 @@ public static class SwaggerMiddlewareExtensions
                 options.RoutePrefix = "api/swagger";
                 options.OAuthClientId(keycloakOptions!.ClientId);
                 options.OAuthClientSecret(keycloakOptions!.ClientSecret);
+                options.EnableTryItOutByDefault();
+
+                //options.EnablePersistAuthorization();
             }
         });
 
