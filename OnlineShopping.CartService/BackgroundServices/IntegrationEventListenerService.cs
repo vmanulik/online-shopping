@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Text;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OnlineShopping.CartService.Domain.Entities;
 using OnlineShopping.CartService.Infrastructure;
 using OnlineShopping.Shared.Domain.Events;
 using OnlineShopping.Shared.Infrastructure.Persistence.Options;
 using RabbitMQ.Client.Events;
-using System.Text;
 
 namespace OnlineShopping.CartService.BackgroundServices;
 

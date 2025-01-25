@@ -6,7 +6,7 @@ namespace OnlineShopping.CartService.API;
 
 [ApiController]
 [ApiExceptionFilter]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class CartControllerBase : ControllerBase
 {
     private ISender? _mediator;

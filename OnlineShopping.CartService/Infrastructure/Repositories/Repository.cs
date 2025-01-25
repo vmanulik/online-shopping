@@ -1,7 +1,6 @@
-﻿using LiteDB.Queryable;
+﻿using System.Linq.Expressions;
+using LiteDB.Queryable;
 using OnlineShopping.CartService.Infrastructure.Interfaces;
-
-using System.Linq.Expressions;
 
 namespace OnlineShopping.CartService.Infrastructure.Repositories;
 

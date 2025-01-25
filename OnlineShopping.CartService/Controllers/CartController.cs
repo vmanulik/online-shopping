@@ -4,60 +4,58 @@ using OnlineShopping.CartService.API.Commands;
 using OnlineShopping.CartService.API.Queries;
 using OnlineShopping.CartService.Application.DTOs;
 
-namespace OnlineShopping.CartService.API
+namespace OnlineShopping.CartService.API;
+
+[ApiVersion("1.0")]
+[ApiController]
+public class CartController : CartControllerBase
 {
-    [ApiVersion("1.0")]
-    [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")] 
-    public class CartController : CartControllerBase
+    private readonly ILogger<CartController> _logger;
+
+    public CartController(
+        ILogger<CartController> logger)
     {
-        private readonly ILogger<CartController> _logger;
+        _logger = logger;
+    }
 
-        public CartController(
-            ILogger<CartController> logger)
-        {
-            _logger = logger;
-        }
+    [HttpGet("{id}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<CartDTO>> GetCartInfo([FromRoute] Guid id)
+    {
+        var items = await Mediator.Send(new GetCartInfoQuery(id));
 
-        [HttpGet("{id}")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<CartDTO>> GetCartInfo([FromRoute] Guid id)
-        {
-            var items = await Mediator.Send(new GetCartInfoQuery(id));
+        return Ok(items);
+    }
 
-            return Ok(items);
-        }
+    [HttpPut("{id}/items/add")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> AddItemToCart([FromRoute] Guid id, [FromBody] AddItemToCartCommand command)
+    {
+        await Mediator.Send(command);
 
-        [HttpPut("{id}/items/add")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AddItemToCart([FromRoute] Guid id, [FromBody] AddItemToCartCommand command)
-        {
-            await Mediator.Send(command);
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [HttpPut("{id}/items/{itemId}/remove")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveItemFromCart([FromRoute] Guid id, [FromRoute] int itemId)
+    {
+        await Mediator.Send(new RemoveItemFromCartCommand(id, itemId));
 
-        [HttpPut("{id}/items/{itemId}/remove")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> RemoveItemFromCart([FromRoute] Guid id, [FromRoute] int itemId)
-        {
-            await Mediator.Send(new RemoveItemFromCartCommand(id, itemId));
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [ApiVersion("2.0")]
+    [HttpGet("{id}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<ItemDTO>>> GetCartItems([FromRoute] Guid id)
+    {
+        var items = await Mediator.Send(new GetCartItemsQuery(id));
 
-        [ApiVersion("2.0")]
-        [HttpGet("{id}")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ItemDTO>>> GetCartItems([FromRoute] Guid id)
-        {
-            var items = await Mediator.Send(new GetCartItemsQuery(id));
-
-            return Ok(items);
-        }
+        return Ok(items);
     }
 }

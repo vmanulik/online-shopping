@@ -1,25 +1,24 @@
 ﻿using System.Linq.Expressions;
 
-namespace OnlineShopping.CartService.Infrastructure
+namespace OnlineShopping.CartService.Infrastructure;
+
+public interface ILiteDbRepository<T> where T : new()
 {
-    public interface ILiteDbRepository<T> where T : new()
-    {
-        Task<List<T>> GetAllAsync();
+    Task<List<T>> GetAllAsync();
 
-        IQueryable<T> GetAllAsQueryable();
+    IQueryable<T> GetAllAsQueryable();
 
-        Task<T> GetByIdAsync(int id);
+    Task<T> GetByIdAsync(int id);
 
-        Task<T> GetByGuidAsync(Guid id);
+    Task<T> GetByGuidAsync(Guid id);
 
-        Task<T> GetByGuidWithIncludeAsync<K>(Guid id, Expression<Func<T, K>> includeClause);
+    Task<T> GetByGuidWithIncludeAsync<K>(Guid id, Expression<Func<T, K>> includeClause);
 
-        Task AddAsync(T entity);
+    Task AddAsync(T entity);
 
-        Task RemoveByIdAsync(int id);
+    Task RemoveByIdAsync(int id);
 
-        Task RemoveByGuidAsync(Guid id);
+    Task RemoveByGuidAsync(Guid id);
 
-        Task UpdateAsync(T entity);
-    }
+    Task UpdateAsync(T entity);
 }

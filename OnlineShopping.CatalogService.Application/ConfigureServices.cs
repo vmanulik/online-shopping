@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShopping.CatalogService.Application.Common.Configurations;
 using OnlineShopping.CatalogService.Application.Common.Configurations.Sieve;
@@ -8,7 +9,6 @@ using OnlineShopping.CatalogService.Infrastracture.Interfaces;
 using OnlineShopping.CatalogService.Infrastructure.Common;
 using OnlineShopping.CatalogService.Infrastructure.Repositories;
 using OnlineShopping.Shared.Infrastructure.Abstraction;
-using System.Reflection;
 
 namespace OnlineShopping.CatalogService.Application;
 
