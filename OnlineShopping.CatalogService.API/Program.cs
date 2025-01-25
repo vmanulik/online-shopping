@@ -91,7 +91,7 @@ public partial class Program
         builder.Services.AddSingleton<IClaimsTransformation, KeycloakJwtTransformation>();
         builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
         builder.Services.AddHostedService<IntegrationEventSenderService>();
-        
+
         var keycloakOptions = builder.Configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
 
         builder.Services.AddSwaggerGen(options =>
@@ -99,7 +99,7 @@ public partial class Program
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
-                Title = "Online Shopping API",
+                Title = "OnlineShopping API",
                 Description = "API for managing Products and Categories items",
                 TermsOfService = new Uri("https://example.com/terms"),
                 License = new OpenApiLicense

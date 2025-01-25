@@ -8,10 +8,12 @@ public static class SwaggerMiddlewareExtensions
     {
         var keycloakOptions = configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
 
-        app.UseSwagger();
+        app.UseSwagger(options =>
+            options.RouteTemplate = "api/swagger/{documentName}/swagger.json");
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog Service API");
+            options.SwaggerEndpoint("v1/swagger.json", "Catalog Service API");
+            options.RoutePrefix = "api/swagger";
             options.OAuthClientId(keycloakOptions!.ClientId);
             options.OAuthClientSecret(keycloakOptions!.ClientSecret);
             options.EnableTryItOutByDefault();
