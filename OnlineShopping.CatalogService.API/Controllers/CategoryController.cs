@@ -4,6 +4,7 @@ using OnlineShopping.CatalogService.Application.Categories.Commands;
 using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Categories.Queries;
 using OnlineShopping.CatalogService.Application.Common.Models;
+using OnlineShopping.Shared.Auth;
 
 namespace OnlineShopping.CatalogService.API.Controllers;
 
@@ -31,7 +32,7 @@ public class CategoryController : CatalogControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
     {
@@ -41,7 +42,7 @@ public class CategoryController : CatalogControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateCategory([FromRoute] int id, [FromBody] UpdateCategoryCommand command)
@@ -57,7 +58,7 @@ public class CategoryController : CatalogControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteCategory([FromRoute] int id)
     {

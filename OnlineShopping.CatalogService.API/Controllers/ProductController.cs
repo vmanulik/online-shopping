@@ -4,6 +4,7 @@ using OnlineShopping.CatalogService.Application.Categories.DTOs;
 using OnlineShopping.CatalogService.Application.Common.Models;
 using OnlineShopping.CatalogService.Application.Products.Commands;
 using OnlineShopping.CatalogService.Application.Products.Queries;
+using OnlineShopping.Shared.Auth;
 
 namespace OnlineShopping.CatalogService.API.Controllers;
 
@@ -31,7 +32,7 @@ public class ProductController : CatalogControllerBase
     }
 
     [HttpPost(Name = nameof(CreateProduct))]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateProduct([FromBody] CreateProductCommand command)
     {
@@ -41,7 +42,7 @@ public class ProductController : CatalogControllerBase
     }
 
     [HttpPut("{id}", Name = nameof(UpdateProduct))]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateProduct([FromRoute] int id, [FromBody] UpdateProductCommand command)
@@ -57,7 +58,7 @@ public class ProductController : CatalogControllerBase
     }
 
     [HttpDelete("{id}", Name = nameof(DeleteProduct))]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteProduct([FromRoute] int id)
     {

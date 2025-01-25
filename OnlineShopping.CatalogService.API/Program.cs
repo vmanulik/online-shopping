@@ -1,6 +1,8 @@
 ﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using OnlineShopping.CatalogService.API.Authorization;
 using OnlineShopping.CatalogService.API.BackgroundServices;
 using OnlineShopping.CatalogService.API.Configuration;
 using OnlineShopping.CatalogService.Application;
@@ -81,12 +83,15 @@ public partial class Program
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
 
-        builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
-        builder.Services.AddHostedService<IntegrationEventSenderService>();
-
         builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection(nameof(RabbitMqOptions)));
         builder.Services.Configure<KeycloakOptions>(builder.Configuration.GetSection(nameof(KeycloakOptions)));
 
+        builder.Services.AddSingleton<RealmRoleTransformation, RealmRoleTransformation>();
+        builder.Services.AddSingleton<ClientRoleTransformation, ClientRoleTransformation>();
+        builder.Services.AddSingleton<IClaimsTransformation, KeycloakJwtTransformation>();
+        builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+        builder.Services.AddHostedService<IntegrationEventSenderService>();
+        
         var keycloakOptions = builder.Configuration.GetSection(nameof(KeycloakOptions)).Get<KeycloakOptions>();
 
         builder.Services.AddSwaggerGen(options =>
@@ -108,7 +113,5 @@ public partial class Program
         });
 
         builder.Services.AddKeycloakAuthentication(keycloakOptions!);
-
-        //builder.Services.AddAuthorization();
     }
 }
