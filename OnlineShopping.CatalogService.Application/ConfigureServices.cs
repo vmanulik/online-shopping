@@ -19,6 +19,7 @@ public static class ConfigureServices
         services.AddHttpContextAccessor();
 
         services.AddScoped(typeof(ILinksService<>), typeof(LinksService<>));
+        services.AddScoped(typeof(IDictionarizeService<>), typeof(DictionarizeService<>));
         services.AddScoped(typeof(ISharedRepository<>), typeof(Repository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

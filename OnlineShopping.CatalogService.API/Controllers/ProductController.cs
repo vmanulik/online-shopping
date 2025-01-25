@@ -31,6 +31,16 @@ public class ProductController : CatalogControllerBase
         return Ok(product);
     }
 
+    [HttpGet("{id}/details", Name = nameof(GetProductDetails))]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Dictionary<string, string>>> GetProductDetails([FromRoute] int id)
+    {
+        var product = await Mediator.Send(new GetProductDetailsQuery(id));
+
+        return Ok(product);
+    }
+
     [HttpPost(Name = nameof(CreateProduct))]
     [Authorize(Roles = AuthorizationConstants.Roles.ManagerRole)]
     [ProducesResponseType(StatusCodes.Status201Created)]

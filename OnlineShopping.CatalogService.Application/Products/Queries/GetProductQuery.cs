@@ -31,7 +31,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDT
         var product = await _productRepository.GetByIdAsync(request.Id, cancellationToken);
         if (product == null)
         {
-            throw new NotFoundException($"Cart ID {request.Id} was not found in the {nameof(Product)}");
+            throw new NotFoundException($"Product ID {request.Id} was not found in the {nameof(Product)}");
         }
 
         var dto = _mapper.Map<ProductDTO>(product);
