@@ -26,6 +26,8 @@ namespace OnlineShopping.CartService
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<JwtLoggingMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
